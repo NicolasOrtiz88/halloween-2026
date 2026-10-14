@@ -6,22 +6,12 @@
 
 const SECRET_CONFIG = {
   // Strict matching targets & aliases (includes creator test aliases)
-  allowedNames: ['maria', 'angelica', 'angel', 'nico', 'nicolas', 'prueba'],
-  aliases: ['maria angelica', 'angelica maria', 'angie', 'mari', 'mary', 'nicolas ortiz', 'nico ortiz'],
+  allowedNames: ['maria', 'angelica', 'angel', 'nico', 'nicolas', 'prueba','ange'],
+  aliases: ['maria angelica', 'angelica maria', 'angie', 'mari', 'mary', 'nicolas ortiz', 'nico ortiz','ange'],
 
   // Sequence of witty, elegant, non-repeating interventions
   // Default duration extended to 22-25 seconds with pause-on-hover & mobile-friendly reading
   interventions: [
-    // 0. Special Creator Mode Intervention (when Nico tests the page)
-    {
-      id: 'nico_creator_check',
-      image: 'assets/disfraces/img_secretas/loboparado.png',
-      position: 'peek-left',
-      sender: 'Tu perrita blanca 🐾',
-      badge: 'Modo Creador 💻',
-      text: '¡Epa mi humano Nico! Modo secreto verificado y activo en mobile. Recuerda que para María / Angélica se activan todos los secretos románticos y la carta confidencial final. 😉✨',
-      duration: 22000
-    },
     // 1. Initial activation on name input
     {
       id: 'guau_initial',
@@ -97,9 +87,9 @@ const SECRET_CONFIG = {
       id: 'real_reason',
       image: 'assets/disfraces/img_secretas/lobo.png',
       position: 'peek-right',
-      sender: 'Nota de Nico 🖤',
-      badge: 'Sin filtros',
-      text: 'Mi humano finge que esto es solo una invitación casual de Halloween... pero entre tú y yo, los dos sabemos quién era la única invitada que de verdad le importaba.',
+      sender: 'Nota cómplice 🐾',
+      badge: 'Entre tú y yo',
+      text: 'Mi humano finge que esto es solo una invitación casual de Halloween... pero entre tú y yo, sé perfectamente a quién quería ver en la fiesta antes que a nadie. 🐾😏',
       duration: 24000
     },
     // 9. Free throw stats
@@ -139,7 +129,7 @@ const SECRET_CONFIG = {
       position: 'peek-right',
       sender: 'La perrita de Nico 🐾',
       badge: 'Pacto secreto',
-      text: 'Si te preguntas por qué esta perrita blanca sabe tanto... es porque Nico no para de hablar de ti. Sigue respondiendo, que me caes demasiado bien.',
+      text: 'Si te preguntas por qué esta perrita blanca sabe tanto... digamos que tengo buen ojo para saber quién se roba la atención de mi humano. Sigue respondiendo, que me caes demasiado bien. 🐾✨',
       duration: 24000
     }
   ],
@@ -147,7 +137,7 @@ const SECRET_CONFIG = {
   // Special card in Phase 5 summary
   summaryCard: {
     avatar: 'assets/disfraces/img_secretas/lobocara.png',
-    badge: '🐾 CARTA CONFIDENCIAL DE NICO & SU PERRITA ✨',
+    badge: '🐾 MENSAJE CONFIDENCIAL & CÓMPLICE ✨',
     title: 'Para quien inspiró más líneas de código de las necesarias…',
     text: '«No te hagas la desentendida. Entre partidos de basket, sonrisas que desvían la atención y planes de Halloween, esta noche la reservamos los dos. El primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»',
     whatsappNote: '🐺 *P.D. de Nico:* Entre partidos de basket y sonrisas que desvían la atención, esta noche la reservamos los dos. No te me escapas. 😏🏀✨'
@@ -361,24 +351,14 @@ const SecretEngine = {
       window.Engine.saveState();
     }
 
-    const clean = normalizeSecretName(matchedName || '');
-    const isNico = clean.includes('nico') || clean.includes('nicolas');
-
     // Show first message smoothly
     if (this.nextTimer) clearTimeout(this.nextTimer);
     this.nextTimer = setTimeout(() => {
-      if (isNico) {
-        this.triggerIntervention('nico_creator_check');
-      } else {
-        this.triggerNextIntervention();
-      }
+      this.triggerNextIntervention();
     }, 600);
 
     if (window.Ghost) {
-      const ghostMsg = isNico
-        ? `¡Atención aquelarre! El creador Nico está inspeccionando la dimensión paranormal... 💻🐾`
-        : `¡Atención en el aquelarre! La más esperada acaba de ingresar su nombre... 😏🐾`;
-      window.Ghost.speak(ghostMsg, 6000);
+      window.Ghost.speak(`¡Atención en el aquelarre! La más esperada acaba de ingresar su nombre... 😏🐾`, 6000);
     }
   },
 

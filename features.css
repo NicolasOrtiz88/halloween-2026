@@ -1013,19 +1013,21 @@ body.secret-mode-active {
 
   /* Costume Gallery single-column on mobile */
   .costume-gallery {
-    grid-template-columns: 1fr;
-    max-height: 52dvh;
-    gap: 0.85rem;
-    padding: 0.2rem;
+    grid-template-columns: 1fr !important;
+    max-height: 64dvh !important;
+    gap: 1rem !important;
+    padding: 0.35rem 0.2rem 1.2rem !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .costume-card {
-    border-radius: 14px;
+    border-radius: 14px !important;
   }
 
   .costume-img-wrapper,
   .costume-dual-view {
-    height: 155px;
+    height: 175px !important;
   }
 
   /* Place input mobile */
