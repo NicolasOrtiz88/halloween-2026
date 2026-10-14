@@ -17,7 +17,7 @@ const SECRET_CONFIG = {
       id: 'guau_initial',
       image: 'assets/disfraces/img_secretas/loboparado.png',
       position: 'peek-left',
-      sender: 'La perrita de Nico 🐾',
+      sender: 'Me conoces...🐾',
       badge: 'Guau guau ✨',
       text: 'Yo solo digo guau todo el día cuando veo algo... pero mi humano Nico dice «guauuu» cada vez que te ve a ti. Y créeme que no suele perder la compostura tan fácil.',
       duration: 23000
@@ -27,7 +27,7 @@ const SECRET_CONFIG = {
       id: 'smile_observation',
       image: 'assets/disfraces/img_secretas/lobocara.png',
       position: 'peek-right',
-      sender: 'La perrita de Nico 🐾',
+      sender: 'Me conoces...🐾',
       badge: 'Nota confidencial',
       text: 'Nico siempre me habla de tu sonrisa... y viéndote bien, tengo que admitir que tiene muy buen gusto. No le digas que te lo conté.',
       duration: 22000
@@ -67,7 +67,7 @@ const SECRET_CONFIG = {
       id: 'behind_scenes',
       image: 'assets/disfraces/img_secretas/loboparado.png',
       position: 'peek-right',
-      sender: 'La perrita de Nico 🐾',
+      sender: 'Me conoces...🐾',
       badge: 'Secreto de código',
       text: '¿Un secreto entre nosotras? Nico estuvo probando esta página como veinte veces solo para asegurarse de que a ti te pareciera perfecta.',
       duration: 22000
@@ -117,7 +117,7 @@ const SECRET_CONFIG = {
       id: 'costume_compliment',
       image: 'assets/disfraces/img_secretas/loboparado.png',
       position: 'peek-left',
-      sender: 'La perrita de Nico 🐾',
+      sender: 'Me conoces...🐾',
       badge: 'Moda canina',
       text: 'Si me preguntas a mí, cualquier disfraz te va a quedar increíble... aunque Nico probablemente se quede mirándote sin saber qué decir.',
       duration: 23000
@@ -127,7 +127,7 @@ const SECRET_CONFIG = {
       id: 'closing_complicity',
       image: 'assets/disfraces/img_secretas/lobo.png',
       position: 'peek-right',
-      sender: 'La perrita de Nico 🐾',
+      sender: 'Me conoces...🐾',
       badge: 'Pacto secreto',
       text: 'Si te preguntas por qué esta perrita blanca sabe tanto... digamos que tengo buen ojo para saber quién se roba la atención de mi humano. Sigue respondiendo, que me caes demasiado bien. 🐾✨',
       duration: 24000
@@ -458,7 +458,7 @@ const SecretEngine = {
     // Set content
     imgEl.src = item.image;
     textEl.textContent = item.text;
-    if (senderEl) senderEl.textContent = item.sender || 'La perrita de Nico 🐾';
+    if (senderEl) senderEl.textContent = item.sender || 'Me conoces...🐾';
     if (badgeEl) badgeEl.textContent = item.badge || 'Guau guau ✨';
     if (pauseHint) {
       pauseHint.textContent = 'Pasa el cursor para pausar ⏳';
