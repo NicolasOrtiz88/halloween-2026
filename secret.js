@@ -12,14 +12,14 @@ const SECRET_CONFIG = {
   // Sequence of witty, elegant, non-repeating interventions
   // Default duration extended to 22-25 seconds with pause-on-hover & mobile-friendly reading
   interventions: [
-    // 1. Initial activation on name input
+    // 1. Initial activation on name input (Adaptada a su perrita cómplice)
     {
       id: 'guau_initial',
       image: 'assets/disfraces/img_secretas/loboparado.png',
       position: 'peek-left',
-      sender: 'Me conoces...🐾',
+      sender: 'Tu perrita cómplice 🐾',
       badge: 'Guau guau ✨',
-      text: 'Yo solo digo guau todo el día cuando veo algo... pero mi humano Nico dice «guauuu» cada vez que te ve a ti. Y créeme que no suele perder la compostura tan fácil.',
+      text: 'Como tu perrita, yo digo "guau" todo el día por cualquier cosa... pero he notado que Nico dice «guauuu» cada vez que te ve. Y créeme, él no suele perder la compostura tan fácil.',
       duration: 23000
     },
     // 2. Smile observation
@@ -27,9 +27,9 @@ const SECRET_CONFIG = {
       id: 'smile_observation',
       image: 'assets/disfraces/img_secretas/lobocara.png',
       position: 'peek-right',
-      sender: 'Me conoces...🐾',
+      sender: 'Tu confidente 🐾',
       badge: 'Nota confidencial',
-      text: 'Nico siempre me habla de tu sonrisa... y viéndote bien, tengo que admitir que tiene muy buen gusto. No le digas que te lo conté.',
+      text: 'Conozco tu sonrisa mejor que nadie, pero al parecer Nico la tiene súper estudiada. Me confesó en secreto que tiene muy buen gusto. No le digas que te lo conté.',
       duration: 22000
     },
     // 3. Basketball banter
@@ -38,8 +38,8 @@ const SECRET_CONFIG = {
       image: 'assets/disfraces/img_secretas/loboparado.png',
       position: 'peek-left',
       sender: 'Estadística de la cancha 🏀',
-      badge: 'Arbitraje no oficial',
-      text: 'Aunque sigas fallando canastas, al menos consigues que alguien siempre quiera volver a jugar contigo y guardarte todos los rebotes.',
+      badge: 'Arbitraje perruno',
+      text: 'He visto cómo juegan basket... y aunque sigas fallando canastas, noto que él siempre quiere guardarte los rebotes y seguir jugando contigo. Para lo competitivo que es, eso es mucho decir.',
       duration: 23000
     },
     // 4. Developer observation
@@ -47,9 +47,9 @@ const SECRET_CONFIG = {
       id: 'developer_note',
       image: 'assets/disfraces/img_secretas/lobo.png',
       position: 'peek-right',
-      sender: 'Nota del desarrollador 💻',
-      badge: 'Línea de código oculta',
-      text: 'Todavía no encuentro una explicación técnica para que ciertas sonrisas se queden dando vueltas en mi cabeza más tiempo del razonable.',
+      sender: 'Secreto de pasillo 💻',
+      badge: 'Línea directa',
+      text: 'Soy una perrita y no entiendo de código, pero escuché a Nico decir que ciertas sonrisas tuyas lo dejan procesando información más tiempo del normal. Ups, lo delaté.',
       duration: 22000
     },
     // 5. Dog translation
@@ -59,7 +59,7 @@ const SECRET_CONFIG = {
       position: 'peek-left',
       sender: 'Traducción canina 🐾',
       badge: 'Canal exclusivo',
-      text: 'Guau, guauuu. El departamento canino informa que el creador de esta página acaba de perder el hilo de lo que estaba haciendo solo por pensar en ti.',
+      text: 'Traducción de mi último ladrido: "Nico pausó sus proyectos importantes solo para programarte esto". Como tu guardiana, apruebo este nivel de atención hacia ti.',
       duration: 22000
     },
     // 6. Behind the scenes
@@ -67,9 +67,9 @@ const SECRET_CONFIG = {
       id: 'behind_scenes',
       image: 'assets/disfraces/img_secretas/loboparado.png',
       position: 'peek-right',
-      sender: 'Me conoces...🐾',
-      badge: 'Secreto de código',
-      text: '¿Un secreto entre nosotras? Nico estuvo probando esta página como veinte veces solo para asegurarse de que a ti te pareciera perfecta.',
+      sender: 'Tu espía favorita 🐾',
+      badge: 'Chisme perruno',
+      text: '¿Un secreto entre nosotras? Nico probó que todo esto quedara perfecto como veinte veces. Él dice que es "control de calidad", yo digo que quería impresionarte.',
       duration: 22000
     },
     // 7. Form companion
@@ -79,7 +79,7 @@ const SECRET_CONFIG = {
       position: 'peek-left',
       sender: 'Voz del aquelarre 🔮',
       badge: 'Intuición canina',
-      text: 'Puedes dudar todo lo que quieras con las preguntas del formulario... pero sobre con quién vas a ir, me parece que la respuesta ya está bastante clara.',
+      text: 'Puedes darle todas las vueltas que quieras a las preguntas del formulario... pero como tu perrita de confianza, te digo que la respuesta de con quién la pasarás mejor es obvia.',
       duration: 23000
     },
     // 8. The real reason
@@ -89,7 +89,7 @@ const SECRET_CONFIG = {
       position: 'peek-right',
       sender: 'Nota cómplice 🐾',
       badge: 'Entre tú y yo',
-      text: 'Mi humano finge que esto es solo una invitación casual de Halloween... pero entre tú y yo, sé perfectamente a quién quería ver en la fiesta antes que a nadie. 🐾😏',
+      text: 'Él finge que esto es solo una invitación casual de Halloween... pero entre tú y yo, sé perfectamente a quién quería ver en la fiesta antes que a nadie. Y yo lo apruebo. 🐾😏',
       duration: 24000
     },
     // 9. Free throw stats
@@ -99,7 +99,7 @@ const SECRET_CONFIG = {
       position: 'peek-left',
       sender: 'Estadística de la cancha 🏀',
       badge: 'Marcador en vivo',
-      text: 'Estadística no oficial: tu porcentaje de tiros libres sigue en duda, pero las ganas de Nico de invitarte a salir tienen un 100% de efectividad.',
+      text: 'Estadística no oficial: tu porcentaje de tiros libres sigue en duda, pero las ganas de Nico de invitarte a salir tienen un sólido 100% de efectividad.',
       duration: 23000
     },
     // 10. Code inspection
@@ -107,9 +107,9 @@ const SECRET_CONFIG = {
       id: 'code_inspection',
       image: 'assets/disfraces/img_secretas/lobocara.png',
       position: 'peek-right',
-      sender: 'Alerta del sistema 💻',
+      sender: 'Alerta de tu mascota 💻',
       badge: 'Inspección',
-      text: 'Alerta: se ha detectado una sobredosis de atención al detalle en esta pantalla. El autor niega cualquier acusación, pero las evidencias hablan solas.',
+      text: 'Alerta perruna: He detectado que alguien le puso demasiada atención a los detalles de esta página solo para verte sonreír. Las pruebas hablan por sí solas.',
       duration: 23000
     },
     // 11. Costume compliment
@@ -117,9 +117,9 @@ const SECRET_CONFIG = {
       id: 'costume_compliment',
       image: 'assets/disfraces/img_secretas/loboparado.png',
       position: 'peek-left',
-      sender: 'Me conoces...🐾',
-      badge: 'Moda canina',
-      text: 'Si me preguntas a mí, cualquier disfraz te va a quedar increíble... aunque Nico probablemente se quede mirándote sin saber qué decir.',
+      sender: 'Moda canina 🐾',
+      badge: 'Visto bueno',
+      text: 'Para mí siempre te ves hermosa, pero trata de no verte *demasiado* bien con tu disfraz o Nico se va a quedar mirándote y perderá su famosa compostura.',
       duration: 23000
     },
     // 12. Closing complicity
@@ -127,9 +127,9 @@ const SECRET_CONFIG = {
       id: 'closing_complicity',
       image: 'assets/disfraces/img_secretas/lobo.png',
       position: 'peek-right',
-      sender: 'Me conoces...🐾',
+      sender: 'Tu perrita fiel 🐾',
       badge: 'Pacto secreto',
-      text: 'Si te preguntas por qué esta perrita blanca sabe tanto... digamos que tengo buen ojo para saber quién se roba la atención de mi humano. Sigue respondiendo, que me caes demasiado bien. 🐾✨',
+      text: 'Si te preguntas por qué sé tanto... es porque los perros notamos cuando alguien mira a nuestra humana de una forma especial. Sigue respondiendo, que Nico me cae demasiado bien para ti. 🐾✨',
       duration: 24000
     }
   ],
@@ -138,9 +138,9 @@ const SECRET_CONFIG = {
   summaryCard: {
     avatar: 'assets/disfraces/img_secretas/lobocara.png',
     badge: '🐾 MENSAJE CONFIDENCIAL & CÓMPLICE ✨',
-    title: 'Para quien inspiró más líneas de código de las necesarias…',
-    text: '«No te hagas la desentendida. Entre partidos de basket, sonrisas que desvían la atención y planes de Halloween, esta noche la reservamos los dos. El primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»',
-    whatsappNote: '🐺 *P.D. de Nico:* Entre partidos de basket y sonrisas que desvían la atención, esta noche la reservamos los dos. No te me escapas. 😏🏀✨'
+    title: 'Aprobado por el control de calidad canino...',
+    text: '«No te hagas la desentendida. Entre los partidos de basket, esas sonrisas tuyas y los planes de Halloween, esta noche la reservamos los dos. Tu perrita ya me dio el visto bueno, así que el primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»',
+    whatsappNote: '🐺 *P.D. de Nico:* Tienes a tu propia mascota conspirando a mi favor. Esta noche es nuestra, no te me escapas. 😏🏀✨'
   }
 };
 
