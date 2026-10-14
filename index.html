@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>🎃 Halloween 2026 — El Pacto de las Sombras</title>
+  <meta name="description" content="Una invitación de Halloween que no te deja escapar. El portal se ha abierto… ¿Te atreves a cruzarlo?">
+  <meta name="theme-color" content="#0d0015">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;500;600;700;800&family=Nosifer&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20261014_3">
+  <link rel="stylesheet" href="features.css?v=20261014_3">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎃</text></svg>">
+</head>
+<body>
+  <!-- Top Persistent Countdown (Visible on all phases except Phase 1) -->
+  <header id="persistent-countdown" class="persistent-countdown hidden" aria-label="Cuenta regresiva de Halloween">
+    <div class="countdown-pill">
+      <span class="countdown-pulse-dot"></span>
+      <span class="countdown-label-mini">EL PORTAL SE ABRE EN:</span>
+      <span class="countdown-time-mini" id="mini-countdown-text">--d --h --m --s</span>
+      <span class="countdown-icon">🎃</span>
+    </div>
+  </header>
+
+  <!-- Audio Controls -->
+  <button id="audio-toggle" class="audio-toggle" aria-label="Toggle audio">
+    <span class="audio-icon">🔇</span>
+  </button>
+
+  <!-- Language Toggle -->
+  <button id="lang-toggle" class="lang-toggle" aria-label="Change language">
+    <span>EN</span>
+  </button>
+
+  <!-- Reduce Motion Toggle -->
+  <button id="motion-toggle" class="motion-toggle" aria-label="Toggle animations">
+    <span>✨</span>
+  </button>
+
+  <!-- Background Canvas for particles/bats -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Fog overlay -->
+  <div class="fog-layer fog-1"></div>
+  <div class="fog-layer fog-2"></div>
+
+  <!-- Moon -->
+  <div class="moon">
+    <div class="moon-crater crater-1"></div>
+    <div class="moon-crater crater-2"></div>
+    <div class="moon-crater crater-3"></div>
+  </div>
+
+  <!-- Haunted House Silhouette -->
+  <div class="haunted-house">
+    <svg viewBox="0 0 400 300" class="house-svg">
+      <polygon points="50,300 50,120 120,60 200,120 200,300" fill="#0a0010" />
+      <polygon points="200,300 200,100 250,50 300,100 300,300" fill="#0d0015" />
+      <polygon points="300,300 300,150 350,110 400,150 400,300" fill="#080012" />
+      <rect x="80" y="160" width="25" height="35" rx="3" class="house-window" />
+      <rect x="130" y="160" width="25" height="35" rx="3" class="house-window" />
+      <rect x="80" y="220" width="25" height="35" rx="3" class="house-window" />
+      <rect x="130" y="220" width="25" height="35" rx="3" class="house-window" />
+      <rect x="225" y="130" width="20" height="30" rx="3" class="house-window" />
+      <rect x="260" y="130" width="20" height="30" rx="3" class="house-window" />
+      <rect x="225" y="190" width="20" height="30" rx="3" class="house-window" />
+      <rect x="260" y="190" width="20" height="30" rx="3" class="house-window" />
+      <rect x="320" y="170" width="20" height="28" rx="3" class="house-window" />
+      <rect x="355" y="170" width="20" height="28" rx="3" class="house-window" />
+      <rect x="100" y="250" width="40" height="50" rx="5" class="house-door" />
+      <polygon points="115,65 125,55 135,65" fill="#0a0010" />
+      <polygon points="245,55 255,40 265,55" fill="#0d0015" />
+    </svg>
+  </div>
+
+  <!-- Ghost Character -->
+  <div id="ghost" class="ghost ghost-hidden">
+    <div class="ghost-body">
+      <div class="ghost-face">
+        <div class="ghost-eyes">
+          <div class="ghost-eye left"></div>
+          <div class="ghost-eye right"></div>
+        </div>
+        <div class="ghost-mouth"></div>
+      </div>
+      <div class="ghost-tail"></div>
+    </div>
+    <div class="ghost-shadow"></div>
+  </div>
+
+  <!-- Ghost Speech Bubble -->
+  <div id="ghost-speech" class="ghost-speech ghost-speech-hidden">
+    <p id="ghost-text"></p>
+  </div>
+
+  <!-- Puppy Meme Modal (Toy chiquito / ¿Cómo vas a decir que no?) -->
+  <div id="puppy-modal" class="puppy-modal hidden" role="dialog" aria-modal="true">
+    <div class="puppy-backdrop" id="puppy-backdrop"></div>
+    <div class="puppy-card">
+      <button class="puppy-close-btn" id="puppy-close" aria-label="Cerrar">&times;</button>
+      <div class="puppy-img-wrapper">
+        <img src="assets/disfraces/no_response.jpg" alt="Perrito con patitas cruzadas mirando inocente" class="puppy-img" style="object-fit: contain !important; max-height: 240px; width: auto; margin: 0 auto; display: block;" />
+        <span class="puppy-badge">🥺 Toy chiquito</span>
+      </div>
+      <div class="puppy-body">
+        <h3 id="puppy-title" class="puppy-title">¿CÓMO QUE NO VAS A IR? 🥺🐾</h3>
+        <p id="puppy-text" class="puppy-text">
+          Toy chiquito y me dio amsiedad... ¿Vas a dejar a este perrito solo en Halloween? ¡No seas aguafiestas y vente a parchar con nosotros!
+        </p>
+        <div class="puppy-actions">
+          <button id="puppy-accept-btn" class="btn btn-primary btn-glow">
+            Bueno ya, ¡me convenciste! 🎉👻
+          </button>
+          <button id="puppy-dismiss-btn" class="btn btn-ghost">
+            Déjame pensarlo 🥺
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secret Peeking Dog Easter Egg Container (Perrita de Nico) -->
+  <div id="peeking-dog-container" class="peeking-dog-container hidden" aria-live="polite">
+    <div class="peeking-dog-stage peek-left" id="peeking-dog-stage">
+      <div class="peeking-dog-body" id="peeking-dog-body" title="Toca para ocultar">
+        <img id="peeking-dog-img" src="assets/disfraces/img_secretas/loboparado.png" alt="Perrita blanca de Nico asomándose" class="peeking-dog-img" />
+      </div>
+      <div class="peeking-speech-card" id="peeking-speech-card">
+        <div class="peeking-card-top-bar">
+          <div class="peeking-header">
+            <div class="peeking-sender-row">
+              <span class="peeking-paw-icon">🐾</span>
+              <span class="peeking-sender-name" id="peeking-sender-name">La perrita de Nico</span>
+            </div>
+            <span class="peeking-badge-status" id="peeking-badge-status">Guau guau ✨</span>
+          </div>
+          <button class="peeking-close-btn" id="peeking-close-btn" aria-label="Cerrar mensaje" title="Cerrar">&times;</button>
+        </div>
+        <p class="peeking-message-text" id="peeking-message-text">
+          Yo solo digo guau todo el día, pero Nico dice «guauuu» cada vez que te ve a ti... 😏🐾
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimized Floating Pill for Secret Interventions -->
+  <button id="peeking-dog-pill" class="peeking-dog-pill hidden" aria-label="Ver mensaje secreto de la perrita">
+    <span class="pill-dot"></span>
+    <span class="pill-icon">🐾</span>
+    <span class="pill-text">Mensaje secreto</span>
+    <span class="pill-arrow">↗</span>
+  </button>
+
+  <!-- ====== PHASE 1: THE ENCOUNTER (Atmospheric & Mysterious Landing) ====== -->
+  <section id="phase-1" class="phase phase-active">
+    <div class="phase-content landing-phase-content">
+      
+      <!-- Ominous Transmission Badge -->
+      <div class="signal-tag animate-pulse-glow">
+        <span class="signal-dot"></span>
+        <span class="signal-text">TRANSMISIÓN NOCTURNA · 31 DE OCTUBRE</span>
+      </div>
+
+      <div class="glitch-container">
+        <h1 class="title-glitch" data-text="Halloween">
+          <span class="title-sub">EL PACTO DE LAS SOMBRAS</span>
+          Halloween
+          <span class="title-year">2026</span>
+        </h1>
+      </div>
+      
+      <div class="mystery-box">
+        <p class="mystery-verse-1">
+          «Hay noches que se planean… <br>
+          <span class="mystery-verse-highlight">y otras que simplemente empiezan a tomar forma.»</span>
+        </p>
+
+        <div class="mystery-divider">
+          <span class="rune-symbol">✦</span>
+          <span class="rune-line"></span>
+          <span class="rune-symbol">🕯️</span>
+          <span class="rune-line"></span>
+          <span class="rune-symbol">✦</span>
+        </div>
+
+        <p class="mystery-verse-2">
+          «Esta todavía no ha decidido qué quiere ser… <br>
+          <strong class="highlight-whisper">pero tu nombre ya fue susurrado en el aquelarre.</strong>»
+        </p>
+
+        <div class="mystery-dare-badge">
+          <span>🗝️ Un umbral secreto ha sido abierto. Tu disfraz, tu destino y tu noche se sellarán aquí.</span>
+        </div>
+      </div>
+
+      <div class="cta-buttons">
+        <button id="btn-yes" class="btn btn-primary btn-glow btn-open-portal">
+          🗝️ ENTRAR AL UMBRAL Y DESCUBRIR MI DESTINO
+        </button>
+        <button id="btn-no" class="btn btn-secondary btn-escape" data-i18n="no_btn">
+          🏃‍♂️ No, prefiero quedarme bajo las cobijas
+        </button>
+      </div>
+
+      <div id="rejection-counter" class="rejection-counter hidden">
+        <span>Intentos de escape:</span> <span id="reject-count">0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PHASE 2: THE PARANORMAL INTERROGATION ====== -->
+  <section id="phase-2" class="phase">
+    <div class="phase-content questionnaire">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+        <span class="progress-text" id="progress-text">1 / 4</span>
+      </div>
+
+      <div class="question-header">
+        <span class="phase-label" data-i18n="paranormal_file">EXPEDIENTE PARANORMAL</span>
+      </div>
+
+      <div id="question-container" class="question-container">
+        <!-- Questions injected dynamically -->
+      </div>
+
+      <div class="question-nav">
+        <button id="btn-prev" class="btn btn-ghost" data-i18n="prev" disabled>← Anterior</button>
+        <button id="btn-next" class="btn btn-primary" data-i18n="next">Siguiente →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PHASE 3: COSTUME SELECTION ====== -->
+  <section id="phase-3" class="phase">
+    <div class="phase-content questionnaire costume-phase-content">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill-2" style="width: 100%;"></div>
+        <span class="progress-text" id="progress-text-2">Fase 2 de 3</span>
+      </div>
+
+      <div class="question-header">
+        <span class="phase-label" data-i18n="costume_lab">LABORATORIO DE DISFRACES 🎭</span>
+        <h2 class="phase-main-title">Propuestas de Disfraces del Parche 🧛</h2>
+        <p class="phase-main-desc">Selecciona tu opción favorita para que quede guardada en tu expediente y se debata en el grupo:</p>
+      </div>
+
+      <div id="costume-gallery" class="costume-gallery">
+        <!-- Costume cards rendered dynamically -->
+      </div>
+
+      <div class="question-nav costume-nav">
+        <button id="btn-prev-2" class="btn btn-ghost">← Volver al Expediente</button>
+        <button id="btn-next-2" class="btn btn-primary btn-glow">Siguiente: Plan de la Noche →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PHASE 4: NIGHT PLAN ====== -->
+  <section id="phase-4" class="phase">
+    <div class="phase-content questionnaire">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill-3"></div>
+        <span class="progress-text" id="progress-text-3">1 / 4</span>
+      </div>
+
+      <div class="question-header">
+        <span class="phase-label" data-i18n="night_plan">PLAN DE LA NOCHE</span>
+      </div>
+
+      <div id="plan-container" class="question-container">
+        <!-- Plan questions injected dynamically -->
+      </div>
+
+      <div class="question-nav">
+        <button id="btn-prev-3" class="btn btn-ghost" data-i18n="prev" disabled>← Anterior</button>
+        <button id="btn-next-3" class="btn btn-primary" data-i18n="see_summary">Ver mi expediente final 📜 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PHASE 5: FINAL INVITATION & SUMMARY ====== -->
+  <section id="phase-5" class="phase">
+    <div class="phase-content summary-phase">
+      <div class="summary-header">
+        <h2 class="summary-title" data-i18n="file_approved">🎃 EXPEDIENTE APROBADO 👻</h2>
+        <p class="summary-subtitle" data-i18n="ghost_approved">El fantasma ha revisado tu expediente y te ha dado acceso al aquelarre.</p>
+      </div>
+
+      <!-- Secret Love Card (Only appears if secret mode unlocked) -->
+      <div id="secret-love-card" class="secret-love-card hidden">
+        <div class="secret-love-inner">
+          <img src="assets/disfraces/img_secretas/lobocara.png" alt="Perrita de Nico cómplice" class="secret-love-avatar" />
+          <div class="secret-love-body">
+            <span class="secret-love-badge">🐾 CARTA CONFIDENCIAL DE NICO & SU PERRITA ✨</span>
+            <h3 class="secret-love-title">Para quien inspiró más líneas de código de las necesarias…</h3>
+            <p class="secret-love-text" id="secret-love-text">
+              «No te hagas la desentendida. Entre partidos de basket, sonrisas que desvían la atención y planes de Halloween, esta noche la reservamos los dos. El primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secret File Profile Card -->
+      <div id="secret-card" class="secret-card">
+        <div class="secret-card-header">
+          <span class="secret-badge" id="secret-badge">🔮</span>
+          <h3 id="secret-title" class="secret-title"></h3>
+        </div>
+        <p id="secret-desc" class="secret-desc"></p>
+      </div>
+
+      <!-- Selected Costume Preview Card -->
+      <div id="summary-costume-card" class="summary-costume-card hidden">
+        <!-- Populated dynamically with chosen costume photo & phrase -->
+      </div>
+
+      <!-- Proposed Place Highlight Banner -->
+      <div id="summary-place-card" class="summary-place-card hidden">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Summary Pre Card -->
+      <div id="summary-card" class="summary-card">
+        <pre id="summary-text"></pre>
+      </div>
+
+      <!-- Countdown inside summary -->
+      <div id="countdown-section" class="countdown-section">
+        <h3 data-i18n="countdown_title">⏳ Cuenta regresiva oficial</h3>
+        <div class="countdown-display">
+          <div class="countdown-unit">
+            <span id="countdown-days" class="countdown-number">--</span>
+            <span class="countdown-label" data-i18n="days">días</span>
+          </div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <span id="countdown-hours" class="countdown-number">--</span>
+            <span class="countdown-label" data-i18n="hours">horas</span>
+          </div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <span id="countdown-mins" class="countdown-number">--</span>
+            <span class="countdown-label" data-i18n="minutes">min</span>
+          </div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-unit">
+            <span id="countdown-secs" class="countdown-number">--</span>
+            <span class="countdown-label" data-i18n="seconds">seg</span>
+          </div>
+        </div>
+      </div>
+
+      
+
+      <!-- Actions -->
+      <div class="summary-actions">
+        <button id="btn-copy" class="btn btn-primary btn-glow" data-i18n="copy_summary">
+          📋 Copiar mi expediente
+        </button>
+        <a id="btn-whatsapp" class="btn btn-whatsapp" href="https://chat.whatsapp.com/FHg8mmrNKXR2SWrBX1c0fV" target="_blank" rel="noopener">
+          <span data-i18n="join_group">💬 Unirme al grupo de WhatsApp</span>
+        </a>
+        <a id="btn-whatsapp-share" class="btn btn-whatsapp-direct" target="_blank" rel="noopener">
+          <span>📲 Compartir mi plan por WhatsApp</span>
+        </a>
+        <button id="btn-restart" class="btn btn-ghost" data-i18n="restart">
+          🔄 Volver a empezar
+        </button>
+      </div>
+
+      <p class="summary-hint" data-i18n="copy_hint">
+        Copia tu expediente y compártelo en el grupo cuando te unas para debatir el lugar y votar por el mejor disfraz. ¡El parche espera tu respuesta!
+      </p>
+    </div>
+  </section>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast hidden">
+    <span id="toast-text"></span>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="ghost.js"></script>
+  <script src="questions.js"></script>
+  <script src="secret.js?v=20261014_3"></script>
+  <script src="engine.js?v=20261014_3"></script>
+  <script src="audio.js"></script>
+  <script src="canvas.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Backups and temporary files
+*_raw_backup.png
+.DS_Store
+Thumbs.db
+*.tmp

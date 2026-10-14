@@ -1,0 +1,949 @@
+/* =======================================================
+   Persistent Top Countdown Bar (Phases 2 to 5)
+   Hidden strictly on Phase 1 (Inicio)
+   ======================================================= */
+.persistent-countdown {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.persistent-countdown.hidden {
+  display: none !important;
+}
+
+.countdown-pill {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(18, 4, 30, 0.94);
+  border: 1.5px solid rgba(255, 154, 46, 0.55);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 154, 46, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  color: var(--white);
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  animation: countdownPillFloat 4s ease-in-out infinite;
+}
+
+@keyframes countdownPillFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.countdown-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--orange-bright);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--orange-bright);
+  animation: pulseDot 1.4s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.7); }
+}
+
+.countdown-label-mini {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--purple-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.countdown-time-mini {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  color: var(--orange-bright) !important;
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.8px !important;
+  font-variant-numeric: tabular-nums !important;
+  text-shadow: 0 0 10px rgba(255, 154, 46, 0.45) !important;
+}
+
+.countdown-icon {
+  font-size: 0.95rem;
+  filter: drop-shadow(0 0 6px rgba(255, 154, 46, 0.4));
+}
+
+/* Clear top space for questionnaires so countdown never collides with content */
+.questionnaire,
+.costume-phase-content,
+.summary-phase {
+  padding-top: calc(58px + env(safe-area-inset-top, 0px)) !important;
+  padding-bottom: calc(35px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* =======================================================
+   Mysterious & Atmospheric Landing (Phase 1)
+   ======================================================= */
+.landing-phase-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 88dvh;
+  padding: 2.2rem 1.25rem 2rem;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.signal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(107, 47, 160, 0.28);
+  border: 1px solid rgba(191, 127, 240, 0.5);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(107, 47, 160, 0.35);
+  animation: tagEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tagEntrance {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.signal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff4757;
+  box-shadow: 0 0 10px #ff4757;
+  animation: signalBlink 1.2s infinite ease-in-out;
+}
+
+@keyframes signalBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(0.65); }
+}
+
+.signal-text {
+  font-size: 0.74rem;
+  letter-spacing: 2.2px;
+  font-weight: 800;
+  color: #ff9f43;
+  text-transform: uppercase;
+}
+
+.mystery-box {
+  background: linear-gradient(180deg, rgba(32, 6, 50, 0.92) 0%, rgba(13, 0, 22, 0.97) 100%);
+  border: 1.5px solid rgba(191, 127, 240, 0.35);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(155, 89, 182, 0.2);
+  border-radius: 20px;
+  padding: 1.6rem 1.4rem;
+  margin: 0.85rem 0 1.5rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+  animation: boxReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes boxReveal {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.mystery-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange-warm), var(--purple-glow), transparent);
+}
+
+.mystery-verse-1,
+.mystery-verse-2 {
+  font-size: clamp(1rem, 3.4vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--white);
+  margin: 0.4rem 0;
+}
+
+.mystery-verse-highlight {
+  color: #ffb347;
+  font-weight: 600;
+}
+
+.mystery-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0.75rem 0;
+  opacity: 0.8;
+}
+
+.rune-symbol {
+  font-size: 0.95rem;
+  color: var(--orange-bright);
+}
+
+.rune-line {
+  width: 35px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange-warm), transparent);
+}
+
+.highlight-whisper {
+  color: var(--orange-bright);
+  font-weight: 800;
+  text-shadow: 0 0 14px rgba(255, 154, 46, 0.55);
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.mystery-dare-badge {
+  background: rgba(232, 116, 12, 0.15);
+  border: 1px dashed rgba(255, 154, 46, 0.5);
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: #ffb347;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  display: inline-block;
+  margin-top: 0.4rem;
+}
+
+.btn-open-portal {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px;
+  padding: 1rem 1.75rem !important;
+  border-radius: 14px !important;
+  box-shadow: 0 0 30px rgba(232, 116, 12, 0.55), inset 0 0 12px rgba(255, 255, 255, 0.25) !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-open-portal:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 0 45px rgba(255, 154, 46, 0.8), inset 0 0 16px rgba(255, 255, 255, 0.35) !important;
+}
+
+/* =======================================================
+   Peeking Dog Easter Egg Container (Perrita de Nico)
+   Inspired by Reference Image (Bear peeking from side)
+   ======================================================= */
+.peeking-dog-container {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.peeking-dog-container.hidden {
+  display: none !important;
+}
+
+/* Entering and Exiting Animations */
+.peeking-dog-container.dog-entering .peeking-dog-body {
+  animation: dogSpringPeek 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.peeking-dog-container.dog-entering .peeking-speech-card {
+  animation: bubbleSpringPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+.peeking-dog-container.dog-exiting {
+  animation: dogRetreat 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes dogSpringPeek {
+  0% { transform: translateX(-100%); opacity: 0; }
+  70% { transform: translateX(8px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes bubbleSpringPop {
+  0% { transform: scale(0.8) translateY(10px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes dogRetreat {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: translateX(-40px) scale(0.9); opacity: 0; }
+}
+
+/* Base Stage Layout */
+.peeking-dog-stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: auto;
+  position: relative;
+}
+
+/* PEEK LEFT (Default: peeking from left edge of screen) */
+.peeking-dog-stage.peek-left {
+  position: fixed;
+  bottom: 25px;
+  left: 0;
+  flex-direction: row;
+}
+
+.peeking-dog-stage.peek-left .peeking-dog-body {
+  margin-left: -5px; /* aligns straight cut flush with viewport left edge */
+}
+
+/* PEEK RIGHT (peeking from right edge of screen) */
+.peeking-dog-stage.peek-right {
+  position: fixed;
+  bottom: 25px;
+  right: 0;
+  flex-direction: row-reverse;
+}
+
+.peeking-dog-stage.peek-right .peeking-dog-img {
+  transform: scaleX(-1); /* flips image so dog peeks from right */
+}
+
+/* PEEK BOTTOM */
+.peeking-dog-stage.peek-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 15px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* The Dog Illustration (Transparent PNG, No Background) */
+.peeking-dog-body {
+  flex-shrink: 0;
+  width: 110px;
+  max-width: 32vw;
+  display: flex;
+  align-items: flex-end;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 15px rgba(255, 154, 46, 0.35));
+  z-index: 2;
+}
+
+.peeking-dog-img {
+  width: 100%;
+  height: auto;
+  max-height: 165px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Chic Floating Speech Card / Dialogue Bubble */
+.peeking-speech-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(32, 6, 50, 0.98) 0%, rgba(14, 1, 24, 0.99) 100%);
+  border: 1.5px solid rgba(255, 154, 46, 0.65);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9), 0 0 25px rgba(232, 116, 12, 0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  padding: 10px 14px 12px;
+  max-width: 290px;
+  width: calc(100vw - 120px);
+  color: var(--white);
+  text-align: left;
+  z-index: 3;
+}
+
+/* Speech pointer arrow for peek-left */
+.peeking-dog-stage.peek-left .peeking-speech-card::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  bottom: 24px;
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 8px solid rgba(255, 154, 46, 0.65);
+}
+
+/* Speech pointer arrow for peek-right */
+.peeking-dog-stage.peek-right .peeking-speech-card::before {
+  content: '';
+  position: absolute;
+  right: -8px;
+  bottom: 24px;
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 8px solid rgba(255, 154, 46, 0.65);
+}
+
+.peeking-card-top-bar {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-bottom: 6px !important;
+  width: 100% !important;
+}
+
+.peeking-header {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.peeking-sender-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+.peeking-paw-icon {
+  font-size: 0.92rem;
+  flex-shrink: 0;
+}
+
+.peeking-sender-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--orange-bright);
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+
+.peeking-badge-status {
+  font-size: 0.62rem;
+  background: rgba(255, 154, 46, 0.2);
+  color: #ffd180;
+  border: 1px solid rgba(255, 154, 46, 0.45);
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+  width: fit-content;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.peeking-close-btn {
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #fff !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  transition: all 0.2s ease !important;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.peeking-close-btn:hover,
+.peeking-close-btn:active {
+  background: rgba(255, 154, 46, 0.4) !important;
+  border-color: #ff9f43 !important;
+  color: #ff9f43 !important;
+  transform: scale(1.1);
+}
+
+.peeking-message-text {
+  font-size: 0.85rem;
+  line-height: 1.44;
+  color: var(--white);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Minimized Floating Pill Button */
+.peeking-dog-pill {
+  position: fixed !important;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+  left: 14px !important;
+  z-index: 9999 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: linear-gradient(135deg, rgba(42, 8, 65, 0.96), rgba(18, 1, 32, 0.98)) !important;
+  border: 1.5px solid var(--orange-bright) !important;
+  color: #fff !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 12px rgba(255, 154, 46, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  touch-action: manipulation;
+  animation: pillGlowPulse 2.8s ease-in-out infinite !important;
+}
+
+.peeking-dog-pill.hidden {
+  display: none !important;
+}
+
+.peeking-dog-pill .pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange-bright);
+  box-shadow: 0 0 8px var(--orange-bright);
+}
+
+.peeking-dog-pill .pill-arrow {
+  font-size: 0.75rem;
+  color: #ffb347;
+}
+
+@keyframes pillGlowPulse {
+  0%, 100% { transform: translateY(0); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 12px rgba(255, 154, 46, 0.4); }
+  50% { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 154, 46, 0.65); }
+}
+
+/* Secret mode aura on body */
+body.secret-mode-active {
+  box-shadow: inset 0 0 80px rgba(255, 154, 46, 0.25);
+}
+
+/* =======================================================
+   Secret Love Card in Phase 5
+   ======================================================= */
+.secret-love-card {
+  max-width: 540px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgba(38, 6, 42, 0.96) 0%, rgba(18, 0, 32, 0.99) 100%);
+  border: 2px solid var(--orange-warm);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 0 32px rgba(232, 116, 12, 0.35), 0 8px 24px rgba(0, 0, 0, 0.6);
+  text-align: left;
+  animation: cardReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.secret-love-card.hidden {
+  display: none !important;
+}
+
+.secret-love-inner {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.secret-love-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--orange-bright);
+  box-shadow: 0 0 16px rgba(255, 154, 46, 0.5);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.secret-love-body {
+  flex: 1;
+}
+
+.secret-love-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffb347;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.secret-love-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--orange-bright);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.secret-love-text {
+  font-size: 0.9rem;
+  color: var(--white);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* =======================================================
+   Puppy Meme Modal - Show Full Uncropped Face and Paws
+   ======================================================= */
+.puppy-card {
+  max-width: 380px !important;
+  padding: 1.25rem !important;
+  background: rgba(20, 4, 34, 0.98) !important;
+  border: 2px solid var(--purple-light) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(155, 89, 182, 0.4) !important;
+}
+
+.puppy-img-wrapper {
+  width: 100% !important;
+  max-width: 280px !important;
+  height: 250px !important;
+  max-height: 250px !important;
+  margin: 0 auto 0.85rem !important;
+  background: rgba(8, 1, 16, 0.9) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1.5px solid rgba(255, 179, 71, 0.4) !important;
+}
+
+.puppy-img {
+  width: auto !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 245px !important;
+  object-fit: contain !important; /* Preserves entire puppy face, ears, and paws! */
+  display: block !important;
+}
+
+/* =======================================================
+   Ultra Smooth Text, Card & Question Animations
+   ======================================================= */
+:root {
+  --ease-butter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.question-slide {
+  animation: smoothSlideIn 0.55s var(--ease-butter) !important;
+}
+
+@keyframes smoothSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.question-slide.slide-out {
+  animation: smoothSlideOut 0.32s var(--ease-soft) forwards !important;
+}
+
+@keyframes smoothSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.98);
+    filter: blur(4px);
+  }
+}
+
+.question-title,
+.question-subtitle,
+.options-grid,
+.place-input-wrapper {
+  animation: smoothFadeUp 0.6s var(--ease-butter) both;
+}
+
+.question-title { animation-delay: 0.05s; }
+.question-subtitle { animation-delay: 0.1s; }
+.options-grid { animation-delay: 0.16s; }
+
+@keyframes smoothFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.option-btn {
+  transition: all 0.28s var(--ease-butter) !important;
+}
+
+.option-btn:hover {
+  transform: translateX(6px) scale(1.01);
+}
+
+.btn {
+  transition: all 0.3s var(--ease-butter) !important;
+  touch-action: manipulation;
+}
+
+.btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* =======================================================
+   Mobile First Responsiveness (< 480px)
+   ======================================================= */
+@media (max-width: 480px) {
+  /* Controls at top right - compact and neat */
+  .audio-toggle, .lang-toggle, .motion-toggle {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.75rem !important;
+    top: 10px !important;
+  }
+
+  .audio-toggle { right: 10px !important; }
+  .lang-toggle { right: 46px !important; }
+  .motion-toggle { right: 82px !important; }
+
+  /* Hide moon on small screens to prevent collisions and keep top clean */
+  .moon {
+    display: none !important;
+  }
+
+  /* Top Persistent Countdown - Compact single line positioned on left */
+  .persistent-countdown {
+    top: 10px !important;
+    left: 10px !important;
+    transform: none !important;
+    max-width: calc(100vw - 128px) !important;
+    z-index: 1000 !important;
+  }
+
+  .countdown-pill {
+    padding: 4px 10px !important;
+    gap: 5px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .countdown-label-mini {
+    display: none !important; /* Hide label on mobile to save horizontal space */
+  }
+
+  .countdown-time-mini {
+    font-size: 0.8rem !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  /* Landing Page mobile */
+  .landing-phase-content {
+    padding: 2.4rem 0.85rem 1.25rem;
+    min-height: 100dvh;
+    justify-content: flex-start;
+  }
+
+  .title-sub {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+  }
+
+  .title-glitch {
+    font-size: clamp(2.3rem, 9vw, 3.2rem);
+    margin-bottom: 0.2rem;
+  }
+
+  .title-year {
+    font-size: 1.15rem;
+  }
+
+  .signal-tag {
+    padding: 3px 10px;
+    margin-bottom: 0.6rem;
+  }
+
+  .signal-text {
+    font-size: 0.62rem;
+    letter-spacing: 1.2px;
+  }
+
+  .mystery-box {
+    padding: 1rem 0.9rem;
+    margin: 0.6rem 0 1rem;
+    border-radius: 15px;
+  }
+
+  .mystery-verse-1,
+  .mystery-verse-2 {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .mystery-dare-badge {
+    font-size: 0.75rem;
+    padding: 6px 8px;
+  }
+
+  .cta-buttons {
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .btn-open-portal {
+    font-size: 0.92rem !important;
+    padding: 0.85rem 1rem !important;
+    width: 100%;
+  }
+
+  .btn-escape {
+    font-size: 0.78rem !important;
+    padding: 0.6rem 0.8rem !important;
+    width: 100%;
+  }
+
+  /* Peeking dog on mobile */
+  .peeking-dog-stage.peek-left {
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 0 !important;
+    max-width: 96vw !important;
+  }
+
+  .peeking-dog-stage.peek-right {
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 0 !important;
+    max-width: 96vw !important;
+  }
+
+  .peeking-dog-body {
+    width: 85px !important;
+    max-width: 27vw !important;
+  }
+
+  .peeking-speech-card {
+    max-width: calc(100vw - 105px) !important;
+    padding: 9px 11px 11px !important;
+    border-radius: 14px !important;
+  }
+
+  .peeking-sender-name {
+    font-size: 0.74rem !important;
+  }
+
+  .peeking-message-text {
+    font-size: 0.8rem !important;
+    line-height: 1.38 !important;
+  }
+
+  /* iOS iPhone Safari optimizations */
+  input[type="text"],
+  textarea,
+  .text-input,
+  .place-textarea {
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+    -webkit-appearance: none;
+    border-radius: 12px;
+  }
+
+  .puppy-card {
+    max-height: 88dvh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 1.2rem 1rem !important;
+  }
+
+  .puppy-img-wrapper {
+    height: 220px !important;
+    max-height: 38vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #080110 !important;
+  }
+
+  .puppy-img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+
+  /* Costume Gallery single-column on mobile */
+  .costume-gallery {
+    grid-template-columns: 1fr;
+    max-height: 52dvh;
+    gap: 0.85rem;
+    padding: 0.2rem;
+  }
+
+  .costume-card {
+    border-radius: 14px;
+  }
+
+  .costume-img-wrapper,
+  .costume-dual-view {
+    height: 155px;
+  }
+
+  /* Place input mobile */
+  .place-textarea {
+    min-height: 70px;
+    font-size: 0.9rem;
+  }
+
+  .quick-tag-chip {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  /* Summary cards mobile */
+  .summary-costume-thumb {
+    width: 58px;
+    height: 58px;
+  }
+
+  .summary-costume-h4 {
+    font-size: 0.92rem;
+  }
+
+  .summary-costume-quote {
+    font-size: 0.75rem;
+  }
+
+  .secret-love-avatar {
+    width: 58px;
+    height: 58px;
+  }
+
+  .secret-love-title {
+    font-size: 1rem;
+  }
+
+  .secret-love-text {
+    font-size: 0.82rem;
+  }
+}
