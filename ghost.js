@@ -57,7 +57,7 @@ const Ghost = {
     this.currentState = state;
   },
 
-  speak(text, duration = 4000) {
+  speak(text, duration = 6500) {
     if (!this.speechEl || !this.textEl) return;
     
     this.textEl.textContent = text;
@@ -119,7 +119,7 @@ const Ghost = {
     this.setState(state);
     
     setTimeout(() => {
-      this.speak(message, 5000);
+      this.speak(message, 7000);
       Audio?.play('ghost');
     }, 400);
   },
@@ -130,7 +130,7 @@ const Ghost = {
     this.enterFrom('bottom-right');
     this.setState('happy');
     setTimeout(() => {
-      this.speak(message, 4000);
+      this.speak(message, 6500);
       Audio?.play('success');
     }, 300);
   },
@@ -140,7 +140,7 @@ const Ghost = {
     this.enterFrom('center-right');
     this.setState('neutral');
     setTimeout(() => {
-      this.speak(t('ghost_welcome'), 4000);
+      this.speak(t('ghost_welcome'), 6500);
     }, 500);
   },
 

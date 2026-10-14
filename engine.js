@@ -342,7 +342,7 @@ const Engine = {
     if (phase === 3) {
       this.renderCostumeGallery();
       Ghost.enterFrom('center-right');
-      Ghost.speak('¡Laboratorio de Disfraces! Elige una idea o el combo de conejitas con zanahorias 🐰🥕', 5000);
+      Ghost.speak('¡Laboratorio de Disfraces! Elige una idea o el combo de conejitas con zanahorias 🐰🥕', 7000);
 
       if (this.secretUnlocked || window.SecretEngine?.active) {
         setTimeout(() => {
@@ -352,7 +352,7 @@ const Engine = {
     } else if (phase === 4) {
       this.renderQuestion('phase4');
       Ghost.enterFrom('bottom-left');
-      Ghost.speak('¡Ahora lo importante! ¿A dónde propones ir para debatir en el grupo? 📍🍻', 4500);
+      Ghost.speak('¡Ahora lo importante! ¿A dónde propones ir para debatir en el grupo? 📍🍻', 6500);
 
       if (this.secretUnlocked || window.SecretEngine?.active) {
         setTimeout(() => {

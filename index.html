@@ -124,7 +124,7 @@
   <!-- Secret Peeking Dog Easter Egg Container (Perrita de Nico) -->
   <div id="peeking-dog-container" class="peeking-dog-container hidden" aria-live="polite">
     <div class="peeking-dog-stage peek-left" id="peeking-dog-stage">
-      <div class="peeking-dog-body" id="peeking-dog-body" title="Toca para ocultar">
+      <div class="peeking-dog-body" id="peeking-dog-body" title="Toca a la perrita">
         <img id="peeking-dog-img" src="assets/disfraces/img_secretas/loboparado.png" alt="Perrita blanca de Nico asomándose" class="peeking-dog-img" />
       </div>
       <div class="peeking-speech-card" id="peeking-speech-card">
@@ -141,6 +141,15 @@
         <p class="peeking-message-text" id="peeking-message-text">
           Yo solo digo guau todo el día, pero Nico dice «guauuu» cada vez que te ve a ti... 😏🐾
         </p>
+        <div class="peeking-reading-track" aria-hidden="true">
+          <div id="peeking-reading-progress" class="peeking-reading-progress"></div>
+        </div>
+        <div class="peeking-card-footer">
+          <span class="peeking-pause-hint" id="peeking-pause-hint">Pasa el cursor para pausar ⏳</span>
+          <button class="peeking-next-btn" id="peeking-next-btn" type="button" title="Ver el siguiente mensaje secreto">
+            Siguiente ➔
+          </button>
+        </div>
       </div>
     </div>
   </div>

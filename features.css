@@ -479,6 +479,99 @@
   font-weight: 500;
 }
 
+/* Reading Progress Bar Track & Fill */
+.peeking-reading-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  margin-top: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.peeking-reading-progress {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff9a2e, #ff6b6b, #ffd180);
+  box-shadow: 0 0 8px rgba(255, 154, 46, 0.8);
+  border-radius: 999px;
+  transform-origin: left;
+}
+
+@keyframes readingProgress {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+/* Card Footer with Pause Hint and Next Button */
+.peeking-card-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-top: 7px !important;
+  padding-top: 4px !important;
+}
+
+.peeking-pause-hint {
+  font-size: 0.64rem !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  letter-spacing: 0.2px;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 175px;
+}
+
+.peeking-pause-hint.paused-active {
+  color: #ffd180 !important;
+  font-weight: 700 !important;
+}
+
+.peeking-next-btn {
+  background: rgba(255, 154, 46, 0.18) !important;
+  border: 1px solid rgba(255, 154, 46, 0.45) !important;
+  color: #ffd180 !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  padding: 3px 9px !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  touch-action: manipulation;
+  flex-shrink: 0 !important;
+}
+
+.peeking-next-btn:hover,
+.peeking-next-btn:active {
+  background: rgba(255, 154, 46, 0.4) !important;
+  color: #fff !important;
+  border-color: #ff9a2e !important;
+  transform: translateY(-1px);
+}
+
+/* Playful Dog Wiggle animation on tap */
+.peeking-dog-body.dog-wiggle {
+  animation: dogCuteWiggle 0.5s ease-in-out !important;
+}
+
+@keyframes dogCuteWiggle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-8deg) scale(1.05); }
+  50% { transform: rotate(8deg) scale(1.08); }
+  75% { transform: rotate(-4deg) scale(1.03); }
+}
+
 /* Minimized Floating Pill Button */
 .peeking-dog-pill {
   position: fixed !important;
@@ -855,6 +948,21 @@ body.secret-mode-active {
   .peeking-message-text {
     font-size: 0.8rem !important;
     line-height: 1.38 !important;
+  }
+
+  .peeking-card-footer {
+    gap: 4px !important;
+    margin-top: 5px !important;
+  }
+
+  .peeking-pause-hint {
+    font-size: 0.58rem !important;
+    max-width: 130px !important;
+  }
+
+  .peeking-next-btn {
+    font-size: 0.62rem !important;
+    padding: 2px 7px !important;
   }
 
   /* iOS iPhone Safari optimizations */
