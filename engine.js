@@ -518,20 +518,20 @@ const Engine = {
       this.showPuppyModal('unsure');
     });
 
-    // Attach text inputs handlers & Secret Name Checking
+    // Attach text inputs handlers & Secret Name Checking (multi-event for mobile keyboard compatibility)
     container.querySelectorAll('.text-input').forEach((input) => {
-      input.addEventListener('input', (e) => {
-        const key = e.target.dataset.key;
-        const val = e.target.value;
-        this.answers[key] = val;
-        this.saveState();
+      ['input', 'change', 'blur', 'keyup', 'paste'].forEach((evt) => {
+        input.addEventListener(evt, (e) => {
+          const key = e.target.dataset.key;
+          const val = e.target.value;
+          this.answers[key] = val;
+          this.saveState();
 
-        // Real-time check for María / Angélica / Ángel
-        if (key === 'name') {
-          if (window.SecretEngine) {
+          // Real-time check for María / Angélica / Ángel / Nico
+          if (key === 'name' && window.SecretEngine) {
             window.SecretEngine.onNameInput(val);
           }
-        }
+        });
       });
     });
   },
@@ -540,6 +540,14 @@ const Engine = {
     const questions = getQuestions(phase);
     const idx = this.questionIndex[phase];
     const q = questions[idx];
+
+    // Check if name question matches secret in case input event was delayed on mobile
+    if (this.answers.name && window.isSecretMatch && window.isSecretMatch(this.answers.name)) {
+      this.secretUnlocked = true;
+      if (window.SecretEngine && !window.SecretEngine.active) {
+        window.SecretEngine.activate(this.answers.name);
+      }
+    }
 
     // Validate required fields
     if (q && q.type === 'text' && q.required) {
@@ -761,7 +769,9 @@ const Engine = {
     // Secret flirty card if unlocked
     const secretCard = document.getElementById('secret-love-card');
     if (secretCard) {
-      if (this.secretUnlocked) {
+      const hasSecretMatch = this.secretUnlocked || (this.answers.name && window.isSecretMatch && window.isSecretMatch(this.answers.name)) || window.SecretEngine?.active;
+      if (hasSecretMatch) {
+        this.secretUnlocked = true;
         secretCard.classList.remove('hidden');
         const customTarget = this.answers.name || 'hermosa';
         const pEl = document.getElementById('secret-love-text');

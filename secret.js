@@ -5,13 +5,23 @@
    ============================================================ */
 
 const SECRET_CONFIG = {
-  // Strict matching targets & aliases
-  allowedNames: ['maria', 'angelica', 'angel'],
-  aliases: ['maria angelica', 'angelica maria', 'angie', 'mari', 'mary'],
+  // Strict matching targets & aliases (includes creator test aliases)
+  allowedNames: ['maria', 'angelica', 'angel', 'nico', 'nicolas', 'prueba'],
+  aliases: ['maria angelica', 'angelica maria', 'angie', 'mari', 'mary', 'nicolas ortiz', 'nico ortiz'],
 
-  // Sequence of 12 witty, elegant, non-repeating interventions
+  // Sequence of witty, elegant, non-repeating interventions
   // Default duration extended to 22-25 seconds with pause-on-hover & mobile-friendly reading
   interventions: [
+    // 0. Special Creator Mode Intervention (when Nico tests the page)
+    {
+      id: 'nico_creator_check',
+      image: 'assets/disfraces/img_secretas/loboparado.png',
+      position: 'peek-left',
+      sender: 'Tu perrita blanca 🐾',
+      badge: 'Modo Creador 💻',
+      text: '¡Epa mi humano Nico! Modo secreto verificado y activo en mobile. Recuerda que para María / Angélica se activan todos los secretos románticos y la carta confidencial final. 😉✨',
+      duration: 22000
+    },
     // 1. Initial activation on name input
     {
       id: 'guau_initial',
@@ -157,7 +167,7 @@ function isSecretMatch(rawName) {
   const clean = normalizeSecretName(rawName);
   if (!clean) return false;
 
-  const validTokens = ['maria', 'angelica', 'angel', 'angie', 'mari', 'mary'];
+  const validTokens = ['maria', 'angelica', 'angel', 'angie', 'mari', 'mary', 'nico', 'nicolas', 'prueba'];
 
   // Direct matches
   if (SECRET_CONFIG.allowedNames.includes(clean)) return true;
@@ -192,12 +202,21 @@ const SecretEngine = {
 
   init() {
     this.setupListeners();
-    // Check if previously unlocked in localStorage
+
+    // 1. Check URL parameters for immediate preview/test on mobile (?secret=1, ?easteregg=1, ?test=1)
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('secret') || urlParams.has('easteregg') || urlParams.has('test')) {
+        setTimeout(() => this.activate('María'), 500);
+      }
+    } catch (e) {}
+
+    // 2. Check if previously unlocked or stored name in localStorage
     try {
       const saved = localStorage.getItem('halloween-2026');
       if (saved) {
         const state = JSON.parse(saved);
-        if (state.secretUnlocked) {
+        if (state.secretUnlocked || (state.answers?.name && isSecretMatch(state.answers.name))) {
           this.active = true;
           document.body.classList.add('secret-mode-active');
         }
@@ -342,14 +361,24 @@ const SecretEngine = {
       window.Engine.saveState();
     }
 
+    const clean = normalizeSecretName(matchedName || '');
+    const isNico = clean.includes('nico') || clean.includes('nicolas');
+
     // Show first message smoothly
     if (this.nextTimer) clearTimeout(this.nextTimer);
     this.nextTimer = setTimeout(() => {
-      this.triggerNextIntervention();
+      if (isNico) {
+        this.triggerIntervention('nico_creator_check');
+      } else {
+        this.triggerNextIntervention();
+      }
     }, 600);
 
     if (window.Ghost) {
-      window.Ghost.speak(`¡Atención en el aquelarre! La más esperada acaba de ingresar su nombre... 😏🐾`, 6000);
+      const ghostMsg = isNico
+        ? `¡Atención aquelarre! El creador Nico está inspeccionando la dimensión paranormal... 💻🐾`
+        : `¡Atención en el aquelarre! La más esperada acaba de ingresar su nombre... 😏🐾`;
+      window.Ghost.speak(ghostMsg, 6000);
     }
   },
 
