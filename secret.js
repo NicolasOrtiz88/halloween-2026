@@ -89,7 +89,7 @@ const SECRET_CONFIG = {
       position: 'peek-right',
       sender: 'Nota cómplice 🐾',
       badge: 'Entre tú y yo',
-      text: 'Él finge que esto es solo una invitación casual de Halloween... pero entre tú y yo, sé perfectamente a quién quería ver en la fiesta antes que a nadie. Y yo lo apruebo. 🐾😏',
+      text: 'Él finge que esto es solo una invitación casual... pero entre tú y yo, sé que armó todo esto para que te des un respiro de tanta universidad y disfrutemos la noche. Y yo lo apruebo. 🐾😏',
       duration: 24000
     },
     // 9. Free throw stats
@@ -99,7 +99,7 @@ const SECRET_CONFIG = {
       position: 'peek-left',
       sender: 'Estadística de la cancha 🏀',
       badge: 'Marcador en vivo',
-      text: 'Estadística no oficial: tu porcentaje de tiros libres sigue en duda, pero las ganas de Nico de invitarte a salir tienen un sólido 100% de efectividad.',
+      text: 'Estadística no oficial: tu porcentaje de tiros libres sigue en duda, pero la efectividad de Nico para convencerte de soltar los cuadernos y desestresarte es de un sólido 100%. 🏀📚',
       duration: 23000
     },
     // 10. Code inspection
@@ -139,8 +139,8 @@ const SECRET_CONFIG = {
     avatar: 'assets/disfraces/img_secretas/lobocara.png',
     badge: '🐾 MENSAJE CONFIDENCIAL & CÓMPLICE ✨',
     title: 'Aprobado por el control de calidad canino...',
-    text: '«No te hagas la desentendida. Entre los partidos de basket, esas sonrisas tuyas y los planes de Halloween, esta noche la reservamos los dos. Tu perrita ya me dio el visto bueno, así que el primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»',
-    whatsappNote: '🐺 *P.D. de Nico:* Tienes a tu propia mascota conspirando a mi favor. Esta noche es nuestra, no te me escapas. 😏🏀✨'
+    text: '«No te hagas la desentendida. Sé que estos días andas a mil con la universidad, pero entre los partidos de basket, esas sonrisas tuyas y Halloween, esta noche la reservamos los dos para desconectarnos. Tu perrita ya me dio el visto bueno, así que el primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»',
+    whatsappNote: '🐺 *P.D. de Nico:* Tienes a tu propia mascota conspirando a mi favor para sacarte de los libros. Esta noche es nuestra, no te me escapas. 😏🏀✨'
   }
 };
 

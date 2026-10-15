@@ -775,7 +775,7 @@ const Engine = {
         secretCard.classList.remove('hidden');
         const pEl = document.getElementById('secret-love-text');
         if (pEl) {
-          pEl.textContent = window.SECRET_CONFIG?.summaryCard?.text || '«No te hagas la desentendida. Entre los partidos de basket, esas sonrisas tuyas y los planes de Halloween, esta noche la reservamos los dos. Tu perrita ya me dio el visto bueno, así que el primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»';
+          pEl.textContent = window.SECRET_CONFIG?.summaryCard?.text || '«No te hagas la desentendida. Sé que estos días andas a mil con la universidad, pero entre los partidos de basket, esas sonrisas tuyas y Halloween, esta noche la reservamos los dos para desconectarnos. Tu perrita ya me dio el visto bueno, así que el primer brindis va por mi cuenta... y el resto de la noche lo decidimos en la cancha o en la fiesta. 🐾🏀🖤 — Nico»';
         }
       } else {
         secretCard.classList.add('hidden');
@@ -856,7 +856,7 @@ const Engine = {
     );
 
     if (this.secretUnlocked || window.SecretEngine?.active) {
-      lines.push(window.SECRET_CONFIG?.summaryCard?.whatsappNote || '🐺 *P.D. de Nico:* Tienes a tu propia mascota conspirando a mi favor. Esta noche es nuestra, no te me escapas. 😏🏀✨');
+      lines.push(window.SECRET_CONFIG?.summaryCard?.whatsappNote || '🐺 *P.D. de Nico:* Tienes a tu propia mascota conspirando a mi favor para sacarte de los libros. Esta noche es nuestra, no te me escapas. 😏🏀✨');
     }
 
     lines.push(
