@@ -15,16 +15,11 @@ const Engine = {
   wolfTimeout: null,
 
   init() {
-    this.loadState();
+    this.clearState();
     this.setupEventListeners();
     this.setHalloweenDate();
     this.startCountdown();
-    this.updateCountdownVisibility(this.currentPhase);
-
-    // If state has completed answers, resume at summary
-    if (this.answers.name && (this.answers.selected_costume_title || this.answers.place)) {
-      this.goToPhase(5);
-    }
+    this.updateCountdownVisibility(1);
   },
 
   // === State Management ===
@@ -615,7 +610,7 @@ const Engine = {
           <div class="costume-card combo-card ${selectedClass}" data-id="${item.id}" data-title="${item.title}" data-phrase="${item.phrase}" data-image="${item.image1}">
             <div class="costume-badge combo-badge">${item.badge}</div>
             
-            <div class="costume-dual-view">
+            <div class="costume-dual-view" data-action="detail" data-id="${item.id}" title="Toca para ver fotos completas y detalle">
               <div class="dual-half">
                 <img src="${item.image1}" alt="${item.image1Label}" class="dual-img" onerror="this.src='assets/disfraces/no_response.jpg'" />
                 <span class="dual-label">${item.image1Label}</span>
@@ -625,6 +620,7 @@ const Engine = {
                 <img src="${item.image2}" alt="${item.image2Label}" class="dual-img" onerror="this.src='assets/disfraces/no_response.jpg'" />
                 <span class="dual-label">${item.image2Label}</span>
               </div>
+              <span class="costume-zoom-hint">🔍 Ver detalle</span>
             </div>
 
             <div class="costume-card-content">
@@ -645,9 +641,14 @@ const Engine = {
                 </div>
               </div>
 
-              <button type="button" class="btn btn-select-costume ${isSelected ? 'btn-selected' : ''}">
-                ${isSelected ? '✅ ¡Idea Seleccionada!' : '🎯 Seleccionar esta propuesta'}
-              </button>
+              <div class="costume-card-btn-row">
+                <button type="button" class="btn btn-select-costume ${isSelected ? 'btn-selected' : ''}" data-action="select" data-id="${item.id}">
+                  ${isSelected ? '✅ ¡Seleccionado!' : '🎯 Seleccionar'}
+                </button>
+                <button type="button" class="btn btn-view-detail" data-action="detail" data-id="${item.id}">
+                  🔍 Ver detalle
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -656,7 +657,7 @@ const Engine = {
         html += `
           <div class="costume-card custom-card ${selectedClass}" data-id="${item.id}" data-title="${item.title}" data-phrase="${item.phrase}" data-image="">
             <div class="costume-badge">${item.badge}</div>
-            <div class="custom-card-icon">💡✨</div>
+            <div class="custom-card-icon" data-action="detail" data-id="${item.id}" style="cursor: pointer;">💡✨</div>
             <div class="costume-card-content">
               <div class="costume-tag">${item.tag}</div>
               <h3 class="costume-card-title">${item.title}</h3>
@@ -664,9 +665,14 @@ const Engine = {
               
               <textarea id="custom-costume-input" class="text-input" placeholder="Escribe aquí tu disfraz soñado o idea loca…" rows="2">${customText}</textarea>
               
-              <button type="button" class="btn btn-select-costume ${isSelected ? 'btn-selected' : ''}">
-                ${isSelected ? '✅ ¡Idea Seleccionada!' : '🎯 Guardar mi propia idea'}
-              </button>
+              <div class="costume-card-btn-row">
+                <button type="button" class="btn btn-select-costume ${isSelected ? 'btn-selected' : ''}" data-action="select" data-id="${item.id}">
+                  ${isSelected ? '✅ ¡Seleccionado!' : '🎯 Guardar idea'}
+                </button>
+                <button type="button" class="btn btn-view-detail" data-action="detail" data-id="${item.id}">
+                  🔍 Ver detalle
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -674,17 +680,24 @@ const Engine = {
         html += `
           <div class="costume-card ${selectedClass}" data-id="${item.id}" data-title="${item.title}" data-phrase="${item.phrase}" data-image="${item.image}">
             <div class="costume-badge">${item.badge}</div>
-            <div class="costume-img-wrapper">
+            <div class="costume-img-wrapper" data-action="detail" data-id="${item.id}" title="Toca para ver foto completa y detalle">
               <img src="${item.image}" alt="${item.title}" class="costume-img" loading="lazy" onerror="this.src='assets/disfraces/no_response.jpg'" />
+              <span class="costume-zoom-hint">🔍 Ver detalle</span>
             </div>
             <div class="costume-card-content">
               <div class="costume-tag">${item.tag}</div>
               <h3 class="costume-card-title">${item.title}</h3>
               <div class="costume-phrase">💬 "${item.phrase}"</div>
               <p class="costume-desc">${item.desc}</p>
-              <button type="button" class="btn btn-select-costume ${isSelected ? 'btn-selected' : ''}">
-                ${isSelected ? '✅ ¡Idea Seleccionada!' : '🎯 Seleccionar esta propuesta'}
-              </button>
+              
+              <div class="costume-card-btn-row">
+                <button type="button" class="btn btn-select-costume ${isSelected ? 'btn-selected' : ''}" data-action="select" data-id="${item.id}">
+                  ${isSelected ? '✅ ¡Seleccionado!' : '🎯 Seleccionar'}
+                </button>
+                <button type="button" class="btn btn-view-detail" data-action="detail" data-id="${item.id}">
+                  🔍 Ver detalle
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -698,34 +711,16 @@ const Engine = {
       card.addEventListener('click', (e) => {
         if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
 
+        const detailBtn = e.target.closest('[data-action="detail"]');
+        if (detailBtn) {
+          e.stopPropagation();
+          const detailId = detailBtn.dataset.id || card.dataset.id;
+          this.openCostumeDetail(detailId);
+          return;
+        }
+
         const id = card.dataset.id;
-        const title = card.dataset.title;
-        const phrase = card.dataset.phrase;
-        const image = card.dataset.image;
-
-        this.answers.selected_costume_id = id;
-        this.answers.selected_costume_title = title;
-        this.answers.selected_costume_phrase = phrase;
-        this.answers.selected_costume_image = image;
-
-        if (id === 'conejitas_zanahorias') {
-          const checkedRadio = card.querySelector('input[name="combo_role"]:checked');
-          this.answers.selected_costume_role = checkedRadio ? checkedRadio.value : 'Combo Conejitas + Zanahorias 🐰🥕';
-          Ghost.speak('¡JAJAJA "Las conejitas con su alimento"! 🐰🥕 ¡Ese match va a ser lo más comentado de la fiesta!', 5000);
-        } else if (id === 'cervezas') {
-          Ghost.speak('¡El Six-Pack de Corona! 🍻 ¡Si uno se cae a las 3 AM, se caen los 6 juntos!', 4500);
-        } else if (id === 'scooby') {
-          Ghost.speak('¡Misterio a la Orden! 🔎🐶 ¡Alguien tiene que vestirse de Scooby o de fantasma!', 4500);
-        } else {
-          Ghost.speak(`¡Excelente elección! "${title}" le va a dar toda la onda a la noche. 🎭`, 4000);
-        }
-
-        this.saveState();
-        this.renderCostumeGallery();
-        Audio?.play('select');
-        if (this.secretUnlocked || window.SecretEngine?.active) {
-          window.SecretEngine?.onUserProgress();
-        }
+        this.selectCostumeById(id);
       });
     });
 
@@ -747,6 +742,170 @@ const Engine = {
       }
       this.saveState();
     });
+  },
+
+  selectCostumeById(id) {
+    const ideas = getCostumeIdeas();
+    const item = ideas.find(i => i.id === id);
+    if (!item) return;
+
+    this.answers.selected_costume_id = item.id;
+    this.answers.selected_costume_title = item.title;
+    this.answers.selected_costume_phrase = item.phrase;
+    this.answers.selected_costume_image = item.image1 || item.image || '';
+
+    if (id === 'conejitas_zanahorias') {
+      const card = document.querySelector(`.costume-card[data-id="${id}"]`);
+      const checkedRadio = card?.querySelector('input[name="combo_role"]:checked');
+      this.answers.selected_costume_role = checkedRadio ? checkedRadio.value : (this.answers.selected_costume_role || 'Combo Conejitas + Zanahorias 🐰🥕');
+      Ghost.speak('¡JAJAJA "Las conejitas con su alimento"! 🐰🥕 ¡Ese match va a ser lo más comentado de la fiesta!', 5000);
+    } else if (id === 'cervezas') {
+      Ghost.speak('¡El Six-Pack de Corona! 🍻 ¡Si uno se cae a las 3 AM, se caen los 6 juntos!', 4500);
+    } else if (id === 'scooby') {
+      Ghost.speak('¡Misterio a la Orden! 🔎🐶 ¡Alguien tiene que vestirse de Scooby o de fantasma!', 4500);
+    } else {
+      Ghost.speak(`¡Excelente elección! "${item.title}" le va a dar toda la onda a la noche. 🎭`, 4000);
+    }
+
+    this.saveState();
+    this.renderCostumeGallery();
+    Audio?.play('select');
+    if (this.secretUnlocked || window.SecretEngine?.active) {
+      window.SecretEngine?.onUserProgress();
+    }
+  },
+
+  openCostumeDetail(id) {
+    const ideas = getCostumeIdeas();
+    const item = ideas.find(i => i.id === id);
+    if (!item) return;
+
+    const modal = document.getElementById('costume-detail-modal');
+    if (!modal) return;
+
+    const isSelected = this.answers.selected_costume_id === item.id;
+    const currentRole = this.answers.selected_costume_role || (item.roles ? item.roles[0]?.val : '');
+
+    let mediaHtml = '';
+    if (item.isCombo) {
+      mediaHtml = `
+        <div class="modal-dual-images">
+          <div class="modal-img-col">
+            <span class="modal-img-tag">${item.image1Label}</span>
+            <img src="${item.image1}" alt="${item.image1Label}" class="modal-large-img" onerror="this.src='assets/disfraces/no_response.jpg'" />
+          </div>
+          <div class="modal-dual-vs">VS</div>
+          <div class="modal-img-col">
+            <span class="modal-img-tag">${item.image2Label}</span>
+            <img src="${item.image2}" alt="${item.image2Label}" class="modal-large-img" onerror="this.src='assets/disfraces/no_response.jpg'" />
+          </div>
+        </div>
+      `;
+    } else if (item.isCustom) {
+      mediaHtml = `
+        <div class="modal-custom-icon">💡✨</div>
+      `;
+    } else {
+      mediaHtml = `
+        <div class="modal-single-img-wrap">
+          <img src="${item.image}" alt="${item.title}" class="modal-large-img" onerror="this.src='assets/disfraces/no_response.jpg'" />
+        </div>
+      `;
+    }
+
+    let rolePickerHtml = '';
+    if (item.isCombo && item.roles) {
+      rolePickerHtml = `
+        <div class="modal-combo-roles">
+          <span class="combo-roles-label">¿Cuál sería tu rol en este combo?</span>
+          <div class="combo-roles-options">
+            ${item.roles.map((r) => `
+              <label class="combo-role-pill ${currentRole === r.val ? 'active' : ''}">
+                <input type="radio" name="modal_combo_role" value="${r.val}" ${currentRole === r.val ? 'checked' : ''} />
+                ${r.text}
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    modal.innerHTML = `
+      <div class="costume-detail-backdrop" id="costume-detail-backdrop"></div>
+      <div class="costume-detail-card">
+        <button type="button" class="costume-detail-close" id="costume-detail-close" aria-label="Cerrar">&times;</button>
+        
+        <div class="costume-detail-header">
+          <span class="costume-detail-badge">${item.badge}</span>
+          <span class="costume-detail-tag">${item.tag}</span>
+        </div>
+
+        <div class="costume-detail-media">
+          ${mediaHtml}
+        </div>
+
+        <div class="costume-detail-body">
+          <h2 class="costume-detail-title">${item.title}</h2>
+          <div class="costume-detail-phrase">💬 "${item.phrase}"</div>
+          <p class="costume-detail-desc">${item.desc}</p>
+          ${rolePickerHtml}
+        </div>
+
+        <div class="costume-detail-footer">
+          <button type="button" id="modal-select-costume-btn" class="btn btn-primary btn-glow btn-modal-select ${isSelected ? 'btn-selected' : ''}">
+            ${isSelected ? '✅ ¡Propuesta Seleccionada!' : '🎯 Seleccionar esta propuesta'}
+          </button>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    Audio?.play('select');
+
+    // Attach listeners for modal
+    const closeBtn = document.getElementById('costume-detail-close');
+    const backdrop = document.getElementById('costume-detail-backdrop');
+    closeBtn?.addEventListener('click', () => this.closeCostumeDetail());
+    backdrop?.addEventListener('click', () => this.closeCostumeDetail());
+
+    // Role radio change inside modal
+    modal.querySelectorAll('input[name="modal_combo_role"]').forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        this.answers.selected_costume_role = e.target.value;
+        modal.querySelectorAll('.combo-role-pill').forEach(p => p.classList.remove('active'));
+        e.target.closest('.combo-role-pill')?.classList.add('active');
+        this.saveState();
+      });
+    });
+
+    // Select button inside modal
+    const selectBtn = document.getElementById('modal-select-costume-btn');
+    selectBtn?.addEventListener('click', () => {
+      this.answers.selected_costume_id = item.id;
+      this.answers.selected_costume_title = item.title;
+      this.answers.selected_costume_phrase = item.phrase;
+      this.answers.selected_costume_image = item.image1 || item.image || '';
+
+      if (item.isCombo) {
+        const checked = modal.querySelector('input[name="modal_combo_role"]:checked');
+        this.answers.selected_costume_role = checked ? checked.value : (this.answers.selected_costume_role || 'Combo Conejitas + Zanahorias 🐰🥕');
+      }
+
+      this.saveState();
+      this.renderCostumeGallery();
+      Audio?.play('select');
+      Ghost.speak(`¡Seleccionaste "${item.title}"! Quedó registrado en tu expediente. 🎭🔥`, 4500);
+
+      this.closeCostumeDetail();
+      if (this.secretUnlocked || window.SecretEngine?.active) {
+        window.SecretEngine?.onUserProgress();
+      }
+    });
+  },
+
+  closeCostumeDetail() {
+    const modal = document.getElementById('costume-detail-modal');
+    modal?.classList.add('hidden');
   },
 
   finishQuestionnaire() {
@@ -840,6 +999,7 @@ const Engine = {
       '🎃 *EXPEDIENTE DE HALLOWEEN 2026* 👻',
       '═══════════════════════════════',
       `👤 *Víctima:* ${a.name || 'Anónimo'}`,
+      `🎟️ *Asistencia:* ${a.attendance || a.mode || 'Confirmadísimo al 100% 🔥'}`,
       `🎭 *Disfraz elegido:* ${costumeName}${costumeRole ? ` (${costumeRole})` : ''}`,
     ];
 
@@ -849,7 +1009,6 @@ const Engine = {
 
     lines.push(
       `📍 *LUGAR QUE PROPONGO DEBATIR:* ${placeProposed}`,
-      `👥 *Modalidad:* ${a.mode || 'Solo'}`,
       `🕐 *Disponibilidad:* ${a.availability || 'Toda la noche'}`,
       `💰 *Presupuesto:* ${a.budget || 'Normal'}`,
       `🚗 *Transporte:* ${a.transport || 'Lo resuelvo después'}`
@@ -953,14 +1112,11 @@ const Engine = {
     const title = document.getElementById('secret-title');
     const desc = document.getElementById('secret-desc');
 
-    const style = this.answers.style || '';
-    const mode = this.answers.mode || '';
+    const attendance = this.answers.attendance || '';
 
-    let profile = 'secret_chaos';
+    let profile = 'secret_legend';
     if (this.secretUnlocked) profile = 'secret_legend';
-    else if (style.includes('Terror')) profile = 'secret_hunter';
-    else if (style.includes('Creativo')) profile = 'secret_director';
-    else if (mode.includes('Solo')) profile = 'secret_victim';
+    else if (attendance.includes('Toy chiquito')) profile = 'secret_victim';
     else if (this.rejectionCount >= 3) profile = 'secret_chaos';
     else profile = 'secret_legend';
 

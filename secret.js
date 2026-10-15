@@ -149,7 +149,9 @@ function normalizeSecretName(str) {
   return str
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\u0300-\u036f]/g, '') // remove accents
+    .replace(/[^a-z0-9\s]/g, ' ')    // remove punctuation/emojis/symbols
+    .replace(/\s+/g, ' ')           // collapse extra whitespace
     .trim();
 }
 
@@ -157,21 +159,28 @@ function isSecretMatch(rawName) {
   const clean = normalizeSecretName(rawName);
   if (!clean) return false;
 
-  const validTokens = ['maria', 'angelica', 'angel', 'angie', 'mari', 'mary', 'nico', 'nicolas', 'prueba'];
+  const validTokens = ['maria', 'angelica', 'angel', 'angie', 'ange', 'mari', 'mary', 'nico', 'nicolas', 'prueba'];
 
-  // Direct matches
-  if (SECRET_CONFIG.allowedNames.includes(clean)) return true;
-  if (SECRET_CONFIG.aliases.includes(clean)) return true;
+  // Direct exact matches with allowed names or aliases
+  if (SECRET_CONFIG.allowedNames.map(normalizeSecretName).includes(clean)) return true;
+  if (SECRET_CONFIG.aliases.map(normalizeSecretName).includes(clean)) return true;
 
-  // Split into words and check if ANY word is in validTokens
-  const words = clean.split(/[\s,._-]+/).filter(Boolean);
+  // Split clean input into words and check if ANY word matches or starts with a valid token
+  const words = clean.split(' ').filter(Boolean);
   if (words.some((w) => validTokens.includes(w))) {
     return true;
   }
 
-  // Also check if any valid token is contained in the string
+  // Combined continuous strings like 'mariangelica' or 'angelicamaria'
+  const compact = clean.replace(/\s+/g, '');
+  if (compact.includes('mariangelica') || compact.includes('angelicamaria')) {
+    return true;
+  }
+
+  // Check if any full valid token is present as a standalone token or substring
   for (const token of validTokens) {
-    if (clean.includes(token)) return true;
+    if (token.length >= 4 && clean.includes(token)) return true;
+    if (words.includes(token)) return true;
   }
 
   return false;
@@ -191,6 +200,12 @@ const SecretEngine = {
   lastShownItem: null,
 
   init() {
+    // Reset any previous state on fresh load so cache doesn't lock secret active
+    this.active = false;
+    this.shownSet.clear();
+    this.currentIndex = 0;
+    document.body.classList.remove('secret-mode-active');
+
     this.setupListeners();
 
     // 1. Check URL parameters for immediate preview/test on mobile (?secret=1, ?easteregg=1, ?test=1)
@@ -198,18 +213,6 @@ const SecretEngine = {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('secret') || urlParams.has('easteregg') || urlParams.has('test')) {
         setTimeout(() => this.activate('María'), 500);
-      }
-    } catch (e) {}
-
-    // 2. Check if previously unlocked or stored name in localStorage
-    try {
-      const saved = localStorage.getItem('halloween-2026');
-      if (saved) {
-        const state = JSON.parse(saved);
-        if (state.secretUnlocked || (state.answers?.name && isSecretMatch(state.answers.name))) {
-          this.active = true;
-          document.body.classList.add('secret-mode-active');
-        }
       }
     } catch (e) {}
   },

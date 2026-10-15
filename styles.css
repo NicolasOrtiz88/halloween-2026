@@ -1568,18 +1568,21 @@ body.reduce-motion *::after {
 }
 
 .costume-img-wrapper {
-  height: 185px;
+  aspect-ratio: 16 / 11;
+  height: auto;
+  min-height: 195px;
   width: 100%;
   overflow: hidden;
   background: #000;
   position: relative;
+  cursor: pointer;
 }
 
 .costume-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center 15%;
   transition: transform 0.4s ease;
 }
 
@@ -1590,10 +1593,13 @@ body.reduce-motion *::after {
 /* Dual View for Bunny & Carrot */
 .costume-dual-view {
   display: flex;
-  height: 185px;
+  aspect-ratio: 16 / 11;
+  height: auto;
+  min-height: 195px;
   position: relative;
   overflow: hidden;
   background: #000;
+  cursor: pointer;
 }
 
 .dual-half {
@@ -1607,7 +1613,7 @@ body.reduce-motion *::after {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center 15%;
   transition: transform 0.4s ease;
 }
 
@@ -1836,7 +1842,10 @@ body.reduce-motion *::after {
 
   .costume-img-wrapper,
   .costume-dual-view {
-    height: 175px;
+    height: auto;
+    aspect-ratio: 16 / 11;
+    min-height: 200px;
+    max-height: 240px;
   }
 
   .costume-card-content {

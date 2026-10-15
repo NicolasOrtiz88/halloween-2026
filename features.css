@@ -1027,7 +1027,18 @@ body.secret-mode-active {
 
   .costume-img-wrapper,
   .costume-dual-view {
-    height: 175px !important;
+    height: auto !important;
+    aspect-ratio: 16 / 11 !important;
+    min-height: 200px !important;
+    max-height: 245px !important;
+  }
+
+  .costume-img {
+    object-position: center 15% !important;
+  }
+
+  .dual-img {
+    object-position: center 15% !important;
   }
 
   /* Place input mobile */
@@ -1068,3 +1079,324 @@ body.secret-mode-active {
     font-size: 0.82rem;
   }
 }
+
+/* =======================================================
+   Costume Detail Modal & Zoom Features
+   ======================================================= */
+.costume-zoom-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(14, 3, 22, 0.88);
+  border: 1px solid rgba(255, 154, 46, 0.65);
+  color: #ffb703;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 5;
+}
+
+.costume-card:hover .costume-zoom-hint {
+  transform: scale(1.05);
+  background: rgba(30, 8, 48, 0.95);
+  border-color: #ffb703;
+}
+
+.costume-card-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.costume-card-btn-row .btn-select-costume {
+  flex: 1;
+  margin-top: 0 !important;
+}
+
+.btn-view-detail {
+  background: rgba(107, 47, 160, 0.25);
+  border: 1.5px solid rgba(191, 127, 240, 0.5);
+  color: #e0d0f5;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.25s ease;
+}
+
+.btn-view-detail:hover {
+  background: rgba(107, 47, 160, 0.5);
+  color: #fff;
+  border-color: #d8b4fe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(107, 47, 160, 0.4);
+}
+
+/* Detail Modal Backdrop & Container */
+.costume-detail-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.costume-detail-modal.hidden {
+  display: none !important;
+}
+
+.costume-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 0, 12, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 1;
+  animation: fadeInBackdrop 0.3s ease;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.costume-detail-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(180deg, #1b072c 0%, #0d0117 100%);
+  border: 1.5px solid rgba(255, 154, 46, 0.5);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95), 0 0 35px rgba(107, 47, 160, 0.35);
+  display: flex;
+  flex-direction: column;
+  animation: modalScaleUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleUp {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.costume-detail-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 1.35rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.costume-detail-close:hover {
+  background: rgba(239, 68, 68, 0.8);
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
+.costume-detail-header {
+  padding: 1.25rem 1.25rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.costume-detail-badge {
+  background: linear-gradient(135deg, #e8740c, #dc2626);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.costume-detail-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--purple-light);
+}
+
+.costume-detail-media {
+  background: #05000a;
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 0.25rem 1.25rem 0.5rem;
+  border: 1px solid rgba(191, 127, 240, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  max-height: 48dvh;
+}
+
+.modal-single-img-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.modal-large-img {
+  width: 100%;
+  max-height: 46dvh;
+  object-fit: contain;
+  display: block;
+}
+
+.modal-dual-images {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 6px;
+  background: #000;
+  align-items: stretch;
+}
+
+.modal-img-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.modal-img-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(18, 4, 30, 0.9);
+  border: 1px solid rgba(255, 154, 46, 0.5);
+  color: #ffb703;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.modal-dual-images .modal-large-img {
+  max-height: 42dvh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.modal-dual-vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #ffb703;
+  background: rgba(220, 38, 38, 0.35);
+  border: 1px solid rgba(220, 38, 38, 0.6);
+  padding: 4px 6px;
+  border-radius: 6px;
+  align-self: center;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 2px;
+}
+
+.modal-custom-icon {
+  font-size: 4rem;
+  padding: 2.5rem 0;
+  text-align: center;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+.costume-detail-body {
+  padding: 0.9rem 1.25rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.costume-detail-title {
+  font-family: 'Creepster', cursive;
+  color: var(--orange-bright);
+  font-size: 1.45rem;
+  letter-spacing: 1px;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.costume-detail-phrase {
+  font-style: italic;
+  background: rgba(30, 8, 48, 0.7);
+  border-left: 3px solid var(--orange-bright);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  color: #ffeb99;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.costume-detail-desc {
+  color: var(--white);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modal-combo-roles {
+  background: rgba(20, 3, 33, 0.65);
+  border: 1px solid rgba(191, 127, 240, 0.25);
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.costume-detail-footer {
+  padding: 0.75rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.btn-modal-select {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
