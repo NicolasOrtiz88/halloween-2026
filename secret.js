@@ -372,6 +372,7 @@ const SecretEngine = {
     this.currentIndex = 0;
     if (this.nextTimer) clearTimeout(this.nextTimer);
     document.body.classList.remove('secret-mode-active');
+    document.body.classList.remove('has-active-secret-dog');
 
     const pill = document.getElementById('peeking-dog-pill');
     if (pill) pill.classList.add('hidden');
@@ -475,6 +476,7 @@ const SecretEngine = {
     container.classList.remove('hidden');
     container.classList.remove('dog-exiting');
     container.classList.add('dog-entering');
+    document.body.classList.add('has-active-secret-dog');
     this.isCurrentlyVisible = true;
     this.isPaused = false;
 
@@ -504,6 +506,7 @@ const SecretEngine = {
     if (this.dismissTimer) clearTimeout(this.dismissTimer);
     this.isCurrentlyVisible = false;
     this.isPaused = false;
+    document.body.classList.remove('has-active-secret-dog');
 
     container.classList.remove('dog-entering');
     container.classList.add('dog-exiting');
