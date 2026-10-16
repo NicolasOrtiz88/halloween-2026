@@ -120,18 +120,18 @@ const Engine = {
       }
     });
 
-    // Phase 5 actions
-    document.getElementById('btn-copy')?.addEventListener('click', () => this.copySummary());
+    // Phase 5 actions & Dynamic Action Hub
+    document.getElementById('btn-copy')?.addEventListener('click', () => this.copySummary(false));
+    document.getElementById('btn-whatsapp')?.addEventListener('click', () => this.onWhatsAppJoin());
+    document.getElementById('btn-show-guide')?.addEventListener('click', () => this.showCompletionModal());
     document.getElementById('btn-restart')?.addEventListener('click', () => this.restart());
-    // Removed group costume generator
 
-    // When clicking WhatsApp group link, auto copy summary to clipboard
-    document.getElementById('btn-whatsapp')?.addEventListener('click', () => {
-      const text = this.buildSummaryText();
-      navigator.clipboard?.writeText(text).then(() => {
-        this.showToast('📋 ¡Expediente copiado! Al entrar al grupo dale "Pegar" para debatir.');
-      });
-    });
+    // Expediente Celebration Modal listeners
+    document.getElementById('modal-complete-close')?.addEventListener('click', () => this.hideCompletionModal());
+    document.getElementById('modal-complete-backdrop')?.addEventListener('click', () => this.hideCompletionModal());
+    document.getElementById('modal-btn-dismiss')?.addEventListener('click', () => this.hideCompletionModal());
+    document.getElementById('modal-btn-copy')?.addEventListener('click', () => this.copySummary(true));
+    document.getElementById('modal-btn-whatsapp')?.addEventListener('click', () => this.onWhatsAppJoin());
 
     // Language toggle
     document.getElementById('lang-toggle')?.addEventListener('click', () => {
@@ -916,6 +916,11 @@ const Engine = {
     this.saveState();
     this.goToPhase(5);
     Audio?.play('success');
+
+    // Automatically trigger dynamic celebration alert modal after brief smooth transition
+    setTimeout(() => {
+      this.showCompletionModal();
+    }, 450);
   },
 
   // === Summary Generation & WhatsApp Share ===
@@ -980,12 +985,12 @@ const Engine = {
       `;
     }
 
-    // Direct WhatsApp share button
+    // Direct WhatsApp share buttons (both in-page and in modal)
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(summaryText)}`;
     const shareBtn = document.getElementById('btn-whatsapp-share');
-    if (shareBtn) {
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(summaryText)}`;
-      shareBtn.setAttribute('href', waUrl);
-    }
+    if (shareBtn) shareBtn.setAttribute('href', waUrl);
+    const modalShare = document.getElementById('modal-btn-share');
+    if (modalShare) modalShare.setAttribute('href', waUrl);
   },
 
   buildSummaryText() {
@@ -1026,22 +1031,128 @@ const Engine = {
     return lines.join('\n');
   },
 
-  copySummary() {
+  copySummary(fromModal = false) {
     const text = this.buildSummaryText();
-    navigator.clipboard.writeText(text).then(() => {
-      this.showToast('📋 ¡Expediente copiado! Pégalo en el grupo para debatir.');
+
+    const onCopied = () => {
       Audio?.play('success');
-    }).catch(() => {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      document.body.appendChild(textarea);
-      textarea.select();
+      this.launchSpookyConfetti();
+      this.showToast('📋 ¡Expediente copiado! Al entrar al grupo dale "Pegar" para debatir.');
+
+      // 1. Update in-page action hub UI
+      const pageIcon = document.getElementById('page-copy-icon');
+      const pageText = document.getElementById('page-copy-text');
+      const pageSubnote = document.getElementById('page-copy-subnote');
+      const pageStatus = document.getElementById('action-status-1');
+      const cardStep2 = document.getElementById('action-card-step-2');
+
+      if (pageIcon) pageIcon.textContent = '✅';
+      if (pageText) pageText.textContent = '¡Expediente copiado!';
+      if (pageSubnote) pageSubnote.textContent = '¡Listo en tu portapapeles para pegar!';
+      if (pageStatus) {
+        pageStatus.textContent = '¡Listo! ✨';
+        pageStatus.classList.add('status-done');
+      }
+      if (cardStep2) {
+        cardStep2.classList.add('step-highlight-next');
+      }
+
+      // 2. Update modal UI
+      const modalIcon = document.getElementById('modal-copy-icon');
+      const modalText = document.getElementById('modal-copy-text');
+      const modalFeedback = document.getElementById('modal-copy-feedback');
+      const modalStep2 = document.getElementById('modal-step-box-2');
+
+      if (modalIcon) modalIcon.textContent = '✅';
+      if (modalText) modalText.textContent = '¡Expediente copiado con éxito!';
+      if (modalFeedback) modalFeedback.classList.remove('hidden');
+      if (modalStep2) modalStep2.classList.add('step-highlight-next');
+
+      Ghost.speak('¡Listo en tu portapapeles! 📋 Ahora únete al grupo y dale "Pegar".', 6500);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(onCopied).catch(() => {
+        this.fallbackCopy(text, onCopied);
+      });
+    } else {
+      this.fallbackCopy(text, onCopied);
+    }
+  },
+
+  fallbackCopy(text, callback) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
       document.execCommand('copy');
-      document.body.removeChild(textarea);
-      this.showToast('📋 ¡Expediente copiado!');
-      Audio?.play('success');
-    });
+      callback();
+    } catch (e) {
+      this.showToast('⚠️ No se pudo copiar automáticamente. Por favor selecciónalo manualmente.');
+    }
+    document.body.removeChild(textarea);
+  },
+
+  onWhatsAppJoin() {
+    const text = this.buildSummaryText();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(() => {});
+    }
+    this.showToast('📋 ¡Expediente en tu portapapeles! Al entrar dale "Pegar" en el chat.');
+    Audio?.play('success');
+  },
+
+  showCompletionModal() {
+    const modal = document.getElementById('expediente-modal');
+    if (!modal) return;
+
+    // Update WhatsApp direct share link in modal
+    const modalShare = document.getElementById('modal-btn-share');
+    if (modalShare) {
+      const summaryText = this.buildSummaryText();
+      modalShare.setAttribute('href', `https://api.whatsapp.com/send?text=${encodeURIComponent(summaryText)}`);
+    }
+
+    modal.classList.remove('hidden');
+    this.launchSpookyConfetti();
+    Ghost.speak('¡Felicidades! 🎉 Copia tu expediente y mándalo al grupo para que nadie se quede por fuera.', 8000);
+  },
+
+  hideCompletionModal() {
+    const modal = document.getElementById('expediente-modal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+
+    // Smooth scroll down to actions hub so they see next steps
+    const hub = document.querySelector('.summary-actions-hub');
+    hub?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  },
+
+  launchSpookyConfetti() {
+    if (document.body.classList.contains('reduce-motion')) return;
+    const emojis = ['🎃', '👻', '🦇', '🍬', '✨', '💀', '🎉', '🧡', '💜'];
+    const container = document.createElement('div');
+    container.className = 'spooky-confetti-container';
+    document.body.appendChild(container);
+
+    const count = 36;
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement('span');
+      piece.className = 'spooky-confetti-piece';
+      piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      piece.style.left = `${Math.random() * 96}vw`;
+      piece.style.animationDuration = `${1.8 + Math.random() * 1.8}s`;
+      piece.style.animationDelay = `${Math.random() * 0.4}s`;
+      piece.style.fontSize = `${1.1 + Math.random() * 1.4}rem`;
+      container.appendChild(piece);
+    }
+
+    setTimeout(() => {
+      container.remove();
+    }, 4000);
   },
 
   startCountdown() {
@@ -1143,6 +1254,32 @@ const Engine = {
 
   restart() {
     this.clearState();
+    this.hideCompletionModal();
+
+    // Reset copy buttons and stepper state
+    const pageIcon = document.getElementById('page-copy-icon');
+    const pageText = document.getElementById('page-copy-text');
+    const pageSubnote = document.getElementById('page-copy-subnote');
+    const pageStatus = document.getElementById('action-status-1');
+    const cardStep2 = document.getElementById('action-card-step-2');
+    if (pageIcon) pageIcon.textContent = '📋';
+    if (pageText) pageText.textContent = 'Copiar mi expediente';
+    if (pageSubnote) pageSubnote.textContent = 'Guarda tu ficha en el portapapeles';
+    if (pageStatus) {
+      pageStatus.textContent = 'Pendiente';
+      pageStatus.classList.remove('status-done');
+    }
+    if (cardStep2) cardStep2.classList.remove('step-highlight-next');
+
+    const modalIcon = document.getElementById('modal-copy-icon');
+    const modalText = document.getElementById('modal-copy-text');
+    const modalFeedback = document.getElementById('modal-copy-feedback');
+    const modalStep2 = document.getElementById('modal-step-box-2');
+    if (modalIcon) modalIcon.textContent = '📋';
+    if (modalText) modalText.textContent = 'Copiar mi expediente';
+    if (modalFeedback) modalFeedback.classList.add('hidden');
+    if (modalStep2) modalStep2.classList.remove('step-highlight-next');
+
     this.goToPhase(1);
     Ghost.hide();
     document.getElementById('rejection-counter')?.classList.add('hidden');

@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;500;600;700;800&family=Nosifer&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261015_16">
-  <link rel="stylesheet" href="features.css?v=20261015_16">
+  <link rel="stylesheet" href="styles.css?v=20261016_1">
+  <link rel="stylesheet" href="features.css?v=20261016_1">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎃</text></svg>">
 </head>
 <body>
@@ -364,27 +364,124 @@
 
       
 
-      <!-- Actions -->
-      <div class="summary-actions">
-        <button id="btn-copy" class="btn btn-primary btn-glow" data-i18n="copy_summary">
-          📋 Copiar mi expediente
-        </button>
-        <a id="btn-whatsapp" class="btn btn-whatsapp" href="https://chat.whatsapp.com/FHg8mmrNKXR2SWrBX1c0fV" target="_blank" rel="noopener">
-          <span data-i18n="join_group">💬 Unirme al grupo de WhatsApp</span>
-        </a>
-        <a id="btn-whatsapp-share" class="btn btn-whatsapp-direct" target="_blank" rel="noopener">
-          <span>📲 Compartir mi plan por WhatsApp</span>
-        </a>
-        <button id="btn-restart" class="btn btn-ghost" data-i18n="restart">
-          🔄 Volver a empezar
-        </button>
-      </div>
+      <!-- Actions: Dynamic Action Hub -->
+      <div class="summary-actions-hub">
+        <div class="actions-hub-header">
+          <span class="hub-pill">⚡ SIGUIENTE PASO</span>
+          <h3 class="hub-title">Haz oficial tu plan con el parche 🎃</h3>
+          <p class="hub-subtitle">Sigue estos 2 sencillos pasos para coordinar la fiesta en WhatsApp:</p>
+        </div>
 
-      <p class="summary-hint" data-i18n="copy_hint">
-        Copia tu expediente y compártelo en el grupo cuando te unas para debatir el lugar y votar por el mejor disfraz. ¡El parche espera tu respuesta!
-      </p>
+        <div class="actions-stepper-grid">
+          <!-- Paso 1 -->
+          <div class="action-card-step" id="action-card-step-1">
+            <div class="action-card-top">
+              <span class="action-step-num">Paso 1</span>
+              <span class="action-status-pill" id="action-status-1">Pendiente</span>
+            </div>
+            <button id="btn-copy" class="btn btn-primary btn-glow btn-hub-action" data-i18n="copy_summary">
+              <span class="hub-btn-icon" id="page-copy-icon">📋</span>
+              <span class="hub-btn-text" id="page-copy-text">Copiar mi expediente</span>
+            </button>
+            <p class="step-subnote-small" id="page-copy-subnote">Guarda tu ficha en el portapapeles</p>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="action-card-step" id="action-card-step-2">
+            <div class="action-card-top">
+              <span class="action-step-num">Paso 2</span>
+              <span class="action-status-pill step-wa-pill" id="action-status-2">Mándalo al grupo</span>
+            </div>
+            <a id="btn-whatsapp" class="btn btn-whatsapp btn-hub-action" href="https://chat.whatsapp.com/FHg8mmrNKXR2SWrBX1c0fV" target="_blank" rel="noopener">
+              <span class="hub-btn-icon">💬</span>
+              <span class="hub-btn-text" data-i18n="join_group">Unirme al grupo de WhatsApp</span>
+            </a>
+            <p class="step-subnote-small">💡 Al unirte, mantén presionado el chat y dale <strong>Pegar</strong>.</p>
+          </div>
+        </div>
+
+        <!-- Auxiliary Action Buttons -->
+        <div class="actions-extra-row">
+          <a id="btn-whatsapp-share" class="btn btn-whatsapp-direct" target="_blank" rel="noopener">
+            <span>📲 Compartir mi plan directo por WhatsApp</span>
+          </a>
+          <button id="btn-show-guide" class="btn btn-ghost btn-guide-trigger" type="button">
+            <span>⚡ Ver alerta y guía interactiva</span>
+          </button>
+          <button id="btn-restart" class="btn btn-ghost" data-i18n="restart">
+            <span>🔄 Volver a empezar</span>
+          </button>
+        </div>
+
+        <p class="summary-hint" data-i18n="copy_hint">
+          Copia tu expediente y compártelo en el grupo cuando te unas para debatir el lugar y votar por el mejor disfraz. ¡El parche espera tu respuesta!
+        </p>
+      </div>
     </div>
   </section>
+
+  <!-- Expediente Completed Celebration Modal Alert -->
+  <div id="expediente-modal" class="expediente-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-complete-title">
+    <div class="expediente-modal-backdrop" id="modal-complete-backdrop"></div>
+    <div class="expediente-modal-card">
+      <button class="modal-close-btn" id="modal-complete-close" aria-label="Cerrar modal">&times;</button>
+      
+      <div class="modal-complete-badge-row">
+        <span class="modal-complete-badge">🎉 ¡EXPEDIENTE COMPLETADO! ✨</span>
+      </div>
+
+      <div class="modal-complete-header">
+        <div class="modal-complete-icon">🎃📜</div>
+        <h3 id="modal-complete-title" class="modal-complete-title">¡Tu Expediente de Halloween está Listo!</h3>
+        <p class="modal-complete-desc">
+          Tus respuestas ya quedaron selladas. Sigue estos <strong>2 pasos rápidos</strong> para que tu plan quede oficial en el parche:
+        </p>
+      </div>
+
+      <!-- Dynamic Step Flow inside modal -->
+      <div class="modal-complete-steps">
+        <!-- Step 1 -->
+        <div class="modal-step-box step-box-copy" id="modal-step-box-1">
+          <div class="step-box-header">
+            <span class="step-tag step-tag-1">PASO 1</span>
+            <span class="step-tag-desc">Copia tu ficha</span>
+          </div>
+          <button id="modal-btn-copy" class="btn btn-primary btn-step-glow" type="button">
+            <span class="step-btn-icon" id="modal-copy-icon">📋</span>
+            <span class="step-btn-text" id="modal-copy-text">Copiar mi expediente</span>
+          </button>
+          <p class="step-feedback-text hidden" id="modal-copy-feedback">
+            ✅ ¡Copiado al portapapeles! Listo para pegar en el grupo.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="modal-step-box step-box-whatsapp" id="modal-step-box-2">
+          <div class="step-box-header">
+            <span class="step-tag step-tag-2">PASO 2</span>
+            <span class="step-tag-desc">Únete y compártelo</span>
+          </div>
+          <a id="modal-btn-whatsapp" class="btn btn-whatsapp btn-step-wa" href="https://chat.whatsapp.com/FHg8mmrNKXR2SWrBX1c0fV" target="_blank" rel="noopener">
+            <span class="step-btn-icon">💬</span>
+            <span class="step-btn-text">Unirme al grupo de WhatsApp</span>
+          </a>
+          <div class="step-wa-hint">
+            👉 Al entrar al grupo, mantén presionado y dale <strong>Pegar</strong> para enviarlo.
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary Options -->
+      <div class="modal-complete-footer">
+        <a id="modal-btn-share" class="btn btn-whatsapp-direct btn-step-direct" target="_blank" rel="noopener">
+          <span>📲 O compartir directo por WhatsApp</span>
+        </a>
+        <button id="modal-btn-dismiss" class="btn btn-ghost btn-step-dismiss" type="button">
+          <span>📜 Ver mi expediente completo en pantalla</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Costume Detail Modal (Ver más detallado con imagen completa) -->
   <div id="costume-detail-modal" class="costume-detail-modal hidden" role="dialog" aria-modal="true"></div>
@@ -394,13 +491,13 @@
     <span id="toast-text"></span>
   </div>
 
-  <script src="i18n.js?v=20261015_16"></script>
-  <script src="ghost.js?v=20261015_16"></script>
-  <script src="questions.js?v=20261015_16"></script>
-  <script src="secret.js?v=20261015_16"></script>
-  <script src="engine.js?v=20261015_16"></script>
-  <script src="audio.js?v=20261015_16"></script>
-  <script src="canvas.js?v=20261015_16"></script>
-  <script src="app.js?v=20261015_16"></script>
+  <script src="i18n.js?v=20261016_1"></script>
+  <script src="ghost.js?v=20261016_1"></script>
+  <script src="questions.js?v=20261016_1"></script>
+  <script src="secret.js?v=20261016_1"></script>
+  <script src="engine.js?v=20261016_1"></script>
+  <script src="audio.js?v=20261016_1"></script>
+  <script src="canvas.js?v=20261016_1"></script>
+  <script src="app.js?v=20261016_1"></script>
 </body>
 </html>
